@@ -26,7 +26,7 @@ services:
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: "talenthive.onrender.com"
+        value: "talenthive.onrender.com,talenthive-c0jn.onrender.com,localhost,127.0.0.1"
 
 databases:
   - name: talenthive-db
