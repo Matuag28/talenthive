@@ -3,14 +3,14 @@ services:
     name: talenthive
     env: python
     buildCommand: "./build.sh"
-    startCommand: "cd project && gunicorn project.project.wsgi:application"
+    startCommand: "cd project && gunicorn project.wsgi:application"
 
 
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
       - key: DJANGO_SETTINGS_MODULE
-        value: project.project.settings
+        value: project.settings
       - key: SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY
