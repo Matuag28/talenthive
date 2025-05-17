@@ -5,11 +5,14 @@ set -o errexit
 # Install Python dependencies
 pip install -r requirements.txt
 
+# Change to project directory
+cd project
+
 # Collect static files
-python project/manage.py collectstatic --no-input
+python manage.py collectstatic --no-input
 
 # Run migrations
-python project/manage.py migrate
+python manage.py migrate
 
 # Create a new file to store the gunicorn configuration
 echo "bind = '0.0.0.0:10000'
