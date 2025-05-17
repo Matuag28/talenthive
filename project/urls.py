@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
+from django.contrib import admin
 
 urlpatterns = [
-    path('', include('TalentHive.urls')),  # Include all URLs from the TalentHive app
+    path('admin/', admin.site.urls),
+    path('', include('talenthive.urls')),  # Include all URLs from the talenthive app
 ]
 
 if settings.DEBUG:
