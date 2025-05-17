@@ -1,0 +1,1247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Modern Job Portal Profile Editor">
+    <title>Edit Profile - TalentHive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        /* Base Styling */
+        *,
+        *::after,
+        *::before {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: #9d9d9d;
+            background-color: #f8f9fa;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #4b4b4b;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            color: #4b4b4b;
+            font-weight: 700;
+        }
+        
+        input, textarea, select {
+            border-radius: 0px;
+            border: 1px solid #e7e7e7 !important;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: 0px !important;
+            box-shadow: none !important;
+            border: 1px solid #92d35e !important;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #4b4b4b;
+            font-weight: 900;
+        }
+        
+        .green {
+            color: #92d35e;
+        }
+
+        .bg-green {
+            background-color: #92d35e;
+        }
+        
+        /* Navbar Styling */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1030;
+            padding: 15px 0;
+        }
+
+        .nav-bg {
+            background-image: url("{% static 'img/hader-bg.png' %}");
+            background-color: #f1f7eb;
+            background-repeat: no-repeat;
+            background-position: center 0;
+        }
+        
+        .navbar .navbar-brand {
+            display: inline-block;
+            width: 170px;
+            margin-right: 30px;
+        }
+        
+        .navbar .navbar-brand img {
+            width: 100%;
+            height: 50px;
+        }
+        
+        .navbar .notification-icon {
+            position: relative;
+            font-size: 1.2rem;
+            color: #4b4b4b;
+            margin-right: 20px;
+        }
+        
+        .navbar .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #92d35e;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25em 0.6em;
+            font-size: 0.75rem;
+        }
+        
+        .navbar .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .logout-btn {
+            color: #dc3545;
+            background: none;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        /* Search Bar Styling */
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+        }
+        
+        .search-bar .form-control {
+            padding-left: 40px;
+            border-radius: 50px !important;
+            background-color: #f8f9fa;
+        }
+        
+        .search-bar .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9d9d9d;
+        }
+        
+        /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 76px;
+            height: calc(100vh - 76px);
+            width: 250px;
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1020;
+            padding: 20px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link {
+            padding: 12px 15px;
+            color: #4b4b4b;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover {
+            background-color: #f1f7eb;
+            color: #92d35e;
+        }
+        
+        .sidebar .nav-link.active {
+            background-color: #92d35e;
+            color: #ffffff;
+            font-weight: 700;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            padding-top: 96px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Edit Profile Card Styling */
+        .edit-profile-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #92d35e;
+            color: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-upload:hover {
+            background-color: #4b4b4b;
+        }
+        
+        /* Form Styling */
+        .form-label {
+            color: #4b4b4b;
+            font-weight: 700;
+        }
+        
+        .form-control {
+            padding: 12px;
+        }
+        
+        /* Button Styles */
+        .main-btn {
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            background-color: #92d35e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .main-btn:hover {
+            color: white;
+            background-color: #4b4b4b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .outline-btn {
+            text-align: center;
+            text-decoration: none;
+            color: #4b4b4b;
+            font-weight: 600;
+            background-color: transparent;
+            border: 1px solid #e7e7e7;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .outline-btn:hover {
+            color: #4b4b4b;
+            border-color: #92d35e;
+            background-color: #f1f7eb;
+        }
+        
+        /* Skills Styling */
+        .skill-badge {
+            background-color: #f1f7eb;
+            color: #4b4b4b;
+            border-radius: 50px;
+            padding: 8px 15px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            display: inline-flex;
+            font-size: 0.9rem;
+        }
+        
+        .skill-badge i {
+            color: #92d35e;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+        
+        /* Experience/Education Cards */
+        .experience-item, .education-item, .certificate-item {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #92d35e;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .item-actions button {
+            border: none;
+            background: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn {
+            color: #92d35e;
+        }
+        
+        .delete-btn {
+            color: #dc3545;
+        }
+        
+        .add-item-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            color: #92d35e;
+            font-weight: 700;
+            margin-top: 15px;
+        }
+        
+        /* Portfolio Item */
+        .portfolio-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        
+        .portfolio-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        
+        .portfolio-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .portfolio-actions button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .portfolio-edit {
+            background-color: #92d35e;
+            color: white;
+        }
+        
+        .portfolio-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 991px) {
+            .sidebar {
+                width: 70px;
+                padding: 15px 10px;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .search-bar {
+                max-width: 200px;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+                padding: 10px;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .sidebar .nav {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+            }
+            
+            .sidebar .nav-link {
+                margin-right: 5px;
+                margin-bottom: 0;
+                padding: 10px;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 5px;
+            }
+            
+            .sidebar .nav-link span {
+                display: inline;
+                font-size: 0.8rem;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding-top: 76px;
+            }
+            
+            .navbar .search-bar {
+                margin: 10px 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% csrf_token %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'cdashboard.html' %}">
+                <img src=" {% static 'img/Company_logo.png' %}" alt="Company Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Added Search Bar -->
+                <div class="search-bar mx-auto">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" class="form-control" placeholder="Search jobs, companies, or keywords...">
+                </div>
+                
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link notification-icon" href="#">
+                            <i class="bi bi-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'img/man-1459246_1280.png' %}" alt="User Avatar" class="user-avatar me-2">
+                            <span>Ritwik Ratnam</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'cprofile.html' %}">My Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'cdashboard.html' %}">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="{% url 'cprofile.html' %}">
+                    <i class="bi bi-person"></i>
+                    <span>My Profile</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'jobs_list' %}">
+                    <i class="bi bi-search"></i>
+                    <span>Search Jobs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'jobs_list' %}">
+                    <i class="bi bi-briefcase-fill"></i>
+                    <span>Jobs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'applied_jobs' %}">
+                    <i class="bi bi-briefcase"></i>
+                    <span>Applied Jobs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="bi bi-bookmark"></i>
+                    <span>Saved Jobs</span>
+                </a>
+            </li>
+            <li class="nav-item mt-4">
+                <a class="nav-link text-danger" href="#" onclick="logout(); return false;">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Edit Profile</h2>
+                <div>
+                    <a href="{% url 'cprofile.html' %}" class="outline-btn me-2"><i class="bi bi-x-circle me-2"></i>Cancel</a>
+                    <button type="submit" form="profileForm" class="main-btn"><i class="bi bi-check-circle me-2"></i>Save Changes</button>
+                </div>
+            </div>
+            
+            <!-- Edit Profile Form -->
+            <form id="profileForm">
+                <!-- Personal Information -->
+                <div class="edit-profile-card mb-4">
+                    <h4 class="mb-4">Personal Information</h4>
+                    <div class="row">
+                        <div class="col-md-3 text-center mb-4 mb-md-0">
+                            <div class="profile-avatar-container mx-auto">
+                                <img src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}" 
+                                     alt="Profile Avatar" 
+                                     class="profile-avatar" 
+                                     id="avatarPreview">
+                                <label for="avatarInput" class="avatar-upload">
+                                    <i class="bi bi-camera"></i>
+                                </label>
+                                <input type="file" id="avatarInput" accept="image/*" hidden>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="first_name" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" required value="{{ profile.first_name }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="last_name" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" required value="{{ profile.last_name }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="job_title" class="form-label">Job Title</label>
+                                    <input type="text" class="form-control" id="job_title" name="job_title" value="{{ profile.job_title }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="location" class="form-label">Location</label>
+                                    <input type="text" class="form-control" id="location" name="location" value="{{ profile.location }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ profile.email }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" value="{{ profile.phone }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="website" class="form-label">Website</label>
+                                    <input type="url" class="form-control" id="website" name="website" value="{{ profile.website }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="languages" class="form-label">Languages</label>
+                                    <input type="text" class="form-control" id="languages" name="languages" value="{{ profile.languages }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- About Section -->
+                <div class="edit-profile-card mb-4">
+                    <h4 class="mb-4">About</h4>
+                    <div class="mb-4">
+                        <label for="professional_summary" class="form-label">Professional Summary</label>
+                        <textarea class="form-control" id="professional_summary" name="professional_summary" rows="4">{{ profile.professional_summary }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="career_objective" class="form-label">Career Objective</label>
+                        <textarea class="form-control" id="career_objective" name="career_objective" rows="3">{{ profile.career_objective }}</textarea>
+                    </div>
+                </div>
+                
+                <!-- Experience Section -->
+                <div class="edit-profile-card mb-4">
+                    <h4 class="mb-4">Work Experience</h4>
+                    
+                    <div id="workExperienceContainer">
+                        {% for experience in profile.work_experience.all %}
+                        <div class="experience-item mb-4 p-3 border rounded">
+                        <div class="d-flex justify-content-between mb-3">
+                                <h5 class="mb-0">{{ experience.title }}</h5>
+                            <div class="item-actions">
+                                    <button type="button" class="delete-btn" onclick="this.closest('.experience-item').remove()">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Company</label>
+                                    <input type="text" class="form-control company" value="{{ experience.company }}">
+                            </div>
+                            <div class="col-md-6">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" class="form-control title" value="{{ experience.title }}">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                    <label class="form-label">Period</label>
+                                    <input type="text" class="form-control period" value="{{ experience.period }}">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                                <textarea class="form-control description" rows="3">{{ experience.description }}</textarea>
+                        </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <button type="button" class="btn btn-outline-primary" onclick="addWorkExperience()">
+                        <i class="bi bi-plus-circle me-2"></i>Add Work Experience
+                    </button>
+                    </div> 
+                
+                <!-- Education Section -->
+                <div class="edit-profile-card mb-4">
+                    <h4 class="mb-4">Education</h4>
+                    
+                    <div id="educationContainer">
+                        {% for education in profile.education.all %}
+                        <div class="education-item mb-4 p-3 border rounded">
+                            <div class="d-flex justify-content-between mb-3">
+                                <h5 class="mb-0">{{ education.degree }}</h5>
+                            <div class="item-actions">
+                                    <button type="button" class="delete-btn" onclick="this.closest('.education-item').remove()">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                            </div>
+                    </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Institution</label>
+                                    <input type="text" class="form-control institution" value="{{ education.institution }}">
+                            </div>
+                            <div class="col-md-6">
+                                    <label class="form-label">Degree</label>
+                                    <input type="text" class="form-control degree" value="{{ education.degree }}">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                    <label class="form-label">Period</label>
+                                    <input type="text" class="form-control period" value="{{ education.period }}">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                                <textarea class="form-control description" rows="3">{{ education.description }}</textarea>
+                        </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <button type="button" class="btn btn-outline-primary" onclick="addEducation()">
+                        <i class="bi bi-plus-circle me-2"></i>Add Education
+                    </button>
+                    </div>
+                
+                <!-- Certifications Section -->
+                <div class="edit-profile-card mb-4">
+                    <h4 class="mb-4">Certifications</h4>
+                    
+                    <div class="certificate-item">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="mb-0"></h5>
+                            <div class="item-actions">
+                                <button type="button" class="edit-btn"><i class="bi bi-pencil"></i></button>
+                                <button type="button" class="delete-btn"><i class="bi bi-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Issuing Organization</label>
+                                <input type="text" class="form-control" value="">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Issue Date</label>
+                                <input type="date" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Credential ID</label>
+                                <input type="text" class="form-control" value="">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Expiration Date</label>
+                                <div class="d-flex align-items-center">
+                                    <input type="date" class="form-control" disabled>
+                                    <div class="form-check ms-3">
+                                        <input class="form-check-input" type="checkbox" id="no-expiry" value="">
+                                        <label class="form-check-label" for="no-expiry">
+                                            No Expiration
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Credential URL</label>
+                            <input type="url" class="form-control" >
+                        </div>
+                    </div>
+                    
+                    <div class="add-item-btn">
+                        <i class="bi bi-plus-circle"></i> Add Certification
+                    </div>  
+                </div> 
+                
+                <!-- Skills Section -->
+                <div class="edit-profile-card mb-4">
+                    <h4 class="mb-4">Skills</h4>
+                    
+                    <div class="mb-3">
+                        <label for="skillInput" class="form-label">Add Skills</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="skillInput" placeholder="Type a skill and press Enter">
+                            <button class="btn bg-green text-white" type="button" onclick="addSkill()">Add</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="skills-container d-flex flex-wrap gap-2 mt-2">
+                            {% for skill in profile.skills.all %}
+                                <span class="skill-tag">{{ skill.name }} <i class="bi bi-x-circle" onclick="this.parentElement.remove()"></i></span>
+                            {% endfor %}
+                        </div> 
+                    </div> 
+                </div> 
+                
+                <!-- Social Media Links -->
+                <div class="edit-profile-card mb-4">
+                    <h4 class="mb-4">Social Media</h4>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">LinkedIn</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-linkedin text-primary"></i></span>
+                                <input type="url" class="form-control" id="linkedin" name="linkedin" value="{{ profile.social_media.linkedin }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Behance</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-behance text-primary"></i></span>
+                                <input type="url" class="form-control" id="behance" name="behance" value="{{ profile.social_media.behance }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Dribbble</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-dribbble text-danger"></i></span>
+                                <input type="url" class="form-control" id="dribbble" name="dribbble" value="{{ profile.social_media.dribbble }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Medium</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-medium"></i></span>
+                                <input type="url" class="form-control" id="medium" name="medium" value="{{ profile.social_media.medium }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Twitter / X</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-twitter-x"></i></span>
+                                <input type="url" class="form-control" id="twitter" name="twitter" value="{{ profile.social_media.twitter }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">GitHub</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-github"></i></span>
+                                <input type="url" class="form-control" id="github" name="github" placeholder="{{ profile.social_media.github }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Privacy Settings -->
+                <div class="edit-profile-card mb-4">
+                    <h4 class="mb-4">Privacy Settings</h4>
+                    
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="notification-jobs" checked>
+                            <label class="form-check-label" for="notification-jobs">
+                                <strong>Job Notifications</strong>
+                                <p class="text-muted small mb-0">Receive notifications about new job opportunities</p>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="notification-messages" checked>
+                            <label class="form-check-label" for="notification-messages">
+                                <strong>Message Notifications</strong>
+                                <p class="text-muted small mb-0">Receive notifications when someone messages you</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submit Buttons -->
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <button type="button" class="outline-btn"><i class="bi bi-trash me-2"></i>Delete Account</button>
+                    <div>
+                        <a href="{% url 'cprofile.html' %}" class="outline-btn me-2"><i class="bi bi-x-circle me-2"></i>Cancel</a>
+                        <button type="submit" class="main-btn"><i class="bi bi-check-circle me-2"></i>Save Changes</button>
+                    </div>
+                </div>
+            </form>
+
+            <p id="responseMessage"></p>
+        </div>
+            <!-- Footer -->
+            <footer class="mt-5 pt-4 border-top">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>&copy; 2025 TalentHive. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="#" class="me-3">Privacy Policy</a>
+                        <a href="#" class="me-3">Terms of Service</a>
+                        <a href="#">Contact Us</a>
+                    </div>
+                </div>
+            </footer>
+    </div>
+
+    <script src="{% static 'js/nav-bg.js' %}"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Function to handle form submission
+        document.getElementById('profileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Show loading state
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Saving...';
+            submitButton.disabled = true;
+
+            // Collect all form data
+            const formData = {
+                first_name: document.getElementById('first_name').value,
+                last_name: document.getElementById('last_name').value,
+                job_title: document.getElementById('job_title').value,
+                location: document.getElementById('location').value,
+                phone: document.getElementById('phone').value,
+                website: document.getElementById('website').value,
+                languages: document.getElementById('languages').value,
+                professional_summary: document.getElementById('professional_summary').value,
+                career_objective: document.getElementById('career_objective').value,
+                work_experience: getWorkExperience(),
+                education: getEducation(),
+                skills: getSkills(),
+                social_media: {
+                    linkedin: document.getElementById('linkedin').value,
+                    dribbble: document.getElementById('dribbble').value,
+                    behance: document.getElementById('behance').value,
+                    twitter: document.getElementById('twitter').value,
+                    github: document.getElementById('github').value
+                }
+            };
+
+            // Send data to API
+            fetch('/api/candidate/profile/', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message) {
+                    showMessage('Profile updated successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/cprofile.html';
+                    }, 1500);
+                } else {
+                    throw new Error(data.error || 'Failed to update profile');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage(error.message || 'Error updating profile. Please try again.', 'error');
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+            });
+        });
+        
+        // Function to show messages
+        function showMessage(message, type) {
+            const responseMessage = document.getElementById('responseMessage');
+            responseMessage.className = `alert alert-${type === 'success' ? 'success' : 'danger'}`;
+            responseMessage.textContent = message;
+            responseMessage.style.display = 'block';
+            
+            // Hide message after 3 seconds
+            setTimeout(() => {
+                responseMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Function to add work experience
+        function addWorkExperience() {
+            const container = document.getElementById('workExperienceContainer');
+            const div = document.createElement('div');
+            div.className = 'experience-item mb-4 p-3 border rounded';
+            
+            div.innerHTML = `
+                <div class="d-flex justify-content-between mb-3">
+                    <h5 class="mb-0">New Work Experience</h5>
+                    <div class="item-actions">
+                        <button type="button" class="delete-btn" onclick="this.closest('.experience-item').remove()">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Company</label>
+                        <input type="text" class="form-control company" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control title" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Period</label>
+                        <input type="text" class="form-control period" placeholder="e.g., 2020 - Present" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control description" rows="3"></textarea>
+                </div>
+            `;
+            
+            container.appendChild(div);
+        }
+
+        // Function to add education
+        function addEducation() {
+            const container = document.getElementById('educationContainer');
+            const div = document.createElement('div');
+            div.className = 'education-item mb-4 p-3 border rounded';
+            
+            div.innerHTML = `
+                <div class="d-flex justify-content-between mb-3">
+                    <h5 class="mb-0">New Education</h5>
+                    <div class="item-actions">
+                        <button type="button" class="delete-btn" onclick="this.closest('.education-item').remove()">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Institution</label>
+                        <input type="text" class="form-control institution" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Degree</label>
+                        <input type="text" class="form-control degree" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Period</label>
+                        <input type="text" class="form-control period" placeholder="e.g., 2016 - 2020" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control description" rows="3"></textarea>
+                </div>
+            `;
+            
+            container.appendChild(div);
+        }
+
+        // Function to add skill
+        function addSkill(skill = null) {
+            if (skill === null) {
+                skill = document.getElementById('skillInput').value.trim();
+                if (!skill) return;
+                document.getElementById('skillInput').value = '';
+            }
+
+            const container = document.querySelector('.skills-container');
+            const div = document.createElement('span');
+            div.className = 'skill-tag';
+            div.innerHTML = `
+                ${skill}
+                <i class="bi bi-x-circle" onclick="this.parentElement.remove()"></i>
+            `;
+            container.appendChild(div);
+        }
+
+        // Function to get work experience data
+        function getWorkExperience() {
+            const experiences = [];
+            document.querySelectorAll('.experience-item').forEach(item => {
+                experiences.push({
+                    company: item.querySelector('.company').value,
+                    title: item.querySelector('.title').value,
+                    period: item.querySelector('.period').value,
+                    description: item.querySelector('.description').value
+                });
+            });
+            return experiences;
+        }
+            
+        // Function to get education data
+        function getEducation() {
+            const education = [];
+            document.querySelectorAll('.education-item').forEach(item => {
+                education.push({
+                    institution: item.querySelector('.institution').value,
+                    degree: item.querySelector('.degree').value,
+                    period: item.querySelector('.period').value,
+                    description: item.querySelector('.description').value
+                });
+            });
+            return education;
+        }
+
+        // Function to get skills data
+        function getSkills() {
+            const skills = [];
+            document.querySelectorAll('.skill-tag').forEach(tag => {
+                skills.push(tag.textContent.trim());
+            });
+            return skills;
+        }
+
+        // Load profile data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch and populate profile data
+            fetch('/api/candidate/profile/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.profile) {
+                    // Update form fields with profile data
+                    document.getElementById('first_name').value = data.profile.first_name || '';
+                    document.getElementById('last_name').value = data.profile.last_name || '';
+                    document.getElementById('job_title').value = data.profile.job_title || '';
+                    document.getElementById('location').value = data.profile.location || '';
+                    document.getElementById('phone').value = data.profile.phone || '';
+                    document.getElementById('website').value = data.profile.website || '';
+                    document.getElementById('languages').value = data.profile.languages || '';
+                    document.getElementById('professional_summary').value = data.profile.professional_summary || '';
+                    document.getElementById('career_objective').value = data.profile.career_objective || '';
+        
+                    // Update social media fields
+                    if (data.profile.social_media) {
+                        document.getElementById('linkedin').value = data.profile.social_media.linkedin || '';
+                        document.getElementById('dribbble').value = data.profile.social_media.dribbble || '';
+                        document.getElementById('behance').value = data.profile.social_media.behance || '';
+                        document.getElementById('twitter').value = data.profile.social_media.twitter || '';
+                        document.getElementById('github').value = data.profile.social_media.github || '';
+                    }
+
+                    // Update avatar if exists
+                    if (data.profile.avatar_url) {
+                        document.getElementById('avatarPreview').src = data.profile.avatar_url;
+                        document.querySelector('.user-avatar').src = data.profile.avatar_url;
+                    }
+
+                    // Update work experience
+                    if (data.profile.work_experience) {
+                        data.profile.work_experience.forEach(exp => addWorkExperience(exp));
+                    }
+
+                    // Update education
+                    if (data.profile.education) {
+                        data.profile.education.forEach(edu => addEducation(edu));
+                    }
+
+                    // Update skills
+                    if (data.profile.skills) {
+                        data.profile.skills.forEach(skill => addSkill(skill));
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching profile:', error);
+                showMessage('Error loading profile data. Please try again.', 'error');
+            });
+        });
+
+        // Function to handle avatar upload
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('avatar', file);
+
+                fetch('/api/profile/avatar/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update avatar in current page
+                        const avatarUrl = data.avatar_url;
+                        document.getElementById('avatarPreview').src = avatarUrl;
+                        document.querySelector('.user-avatar').src = avatarUrl;
+
+                        // Trigger avatar update in other tabs/windows
+                        localStorage.setItem('avatar_updated', Date.now().toString());
+                        
+                        showMessage('Avatar updated successfully!', 'success');
+                    } else {
+                        showMessage(data.error || 'Failed to update avatar', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showMessage('An error occurred while uploading avatar', 'error');
+                });
+            }
+        }
+
+        // Add event listener for avatar upload
+        document.getElementById('avatarInput').addEventListener('change', handleAvatarUpload);
+    </script>
+
+
+    
+
+
+</body>
+</html>

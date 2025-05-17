@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Company | TalentHive</title>
+    
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    
+    <style>
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Poppins', sans-serif;
+        }
+        .company-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .company-card:hover {
+            transform: translateY(-5px);
+        }
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+        .company-name {
+            font-weight: 600;
+            color: #2e384d;
+        }
+        .company-info {
+            color: #858796;
+            font-size: 0.9rem;
+        }
+        .join-btn {
+            background-color: #4e73df;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .join-btn:hover {
+            background-color: #3755c1;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="text-center mb-4">Select a Company</h2>
+                <p class="text-center text-muted">Choose a company to join as HR</p>
+            </div>
+        </div>
+        
+        <div class="row" id="companies-container">
+            <!-- Companies will be loaded here dynamically -->
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Function to load companies
+        function loadCompanies() {
+            fetch('/api/companies/')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('companies-container');
+                    container.innerHTML = '';
+                    
+                    data.companies.forEach(company => {
+                        const companyCard = `
+                            <div class="col-md-4 mb-4">
+                                <div class="card company-card p-4">
+                                    <div class="text-center">
+                                        <img src="${company.company_logo || '{% static "img/default-company.png" %}'}" 
+                                             alt="${company.company_name}" 
+                                             class="company-logo">
+                                        <h5 class="company-name">${company.company_name}</h5>
+                                        <p class="company-info">
+                                            <i class="bi bi-building"></i> ${company.industry}<br>
+                                            <i class="bi bi-geo-alt"></i> ${company.location}<br>
+                                            <i class="bi bi-people"></i> ${company.company_size}
+                                        </p>
+                                        <button class="btn join-btn" onclick="joinCompany(${company.id})">
+                                            Join Company
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.innerHTML += companyCard;
+                    });
+                })
+                .catch(error => console.error('Error loading companies:', error));
+        }
+
+        // Function to join a company
+        function joinCompany(companyId) {
+            const hrId = localStorage.getItem('hr_id'); // Assuming you store HR ID after login
+            
+            fetch('/api/hr/join-company/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    hr_id: hrId,
+                    company_id: companyId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    // Successfully joined company
+                    window.location.href = '/emp_dash.html';
+                } else {
+                    alert(data.error || 'Failed to join company');
+                }
+            })
+            .catch(error => {
+                console.error('Error joining company:', error);
+                alert('Failed to join company. Please try again.');
+            });
+        }
+
+        // Load companies when page loads
+        document.addEventListener('DOMContentLoaded', loadCompanies);
+    </script>
+</body>
+</html> 

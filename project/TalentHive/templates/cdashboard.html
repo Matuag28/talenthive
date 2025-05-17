@@ -1,0 +1,1163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Modern Job Portal Dashboard">
+    <title>Candidate Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        /* Base Styling */
+        *,
+        *::after,
+        *::before {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: #9d9d9d;
+            background-color: #f8f9fa;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #4b4b4b;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            color: #4b4b4b;
+            font-weight: 700;
+        }
+        
+        input, textarea, select {
+            border-radius: 0px;
+            border: 1px solid #e7e7e7 !important;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: 0px !important;
+            box-shadow: none !important;
+            border: 1px solid #92d35e !important;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #4b4b4b;
+            font-weight: 900;
+        }
+        
+        .green {
+            color: #92d35e;
+        }
+
+        .bg-green {
+            background-color: #92d35e;
+        }
+        
+        /* Navbar Styling */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1030;
+            padding: 15px 0;
+        }
+
+        .nav-bg {
+            background-image: url("../static/img/hader-bg.png");
+            background-color: #f1f7eb;
+            background-repeat: no-repeat;
+            background-position: center 0;
+        }
+        
+        .navbar .navbar-brand {
+            display: inline-block;
+            width: 170px;
+            margin-right: 30px;
+        }
+        
+        .navbar .navbar-brand img {
+            width: 100%;
+            height: 50px;
+        }
+        
+        .navbar .notification-icon {
+            position: relative;
+            font-size: 1.2rem;
+            color: #4b4b4b;
+            margin-right: 20px;
+        }
+        
+        .navbar .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #92d35e;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25em 0.6em;
+            font-size: 0.75rem;
+        }
+        
+        .navbar .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        /* Search Bar Styling */
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+        }
+        
+        .search-bar .form-control {
+            padding-left: 40px;
+            border-radius: 50px !important;
+            background-color: #f8f9fa;
+        }
+        
+        .search-bar .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9d9d9d;
+        }
+        
+        /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 76px;
+            height: calc(100vh - 76px);
+            width: 250px;
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1020;
+            padding: 20px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link {
+            padding: 12px 15px;
+            color: #4b4b4b;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover {
+            background-color: #f1f7eb;
+            color: #92d35e;
+        }
+        
+        .sidebar .nav-link.active {
+            background-color: #92d35e;
+            color: #ffffff;
+            font-weight: 700;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            padding-top: 96px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Dashboard Stats */
+        .stat-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card .stat-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #f1f7eb;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .stat-card .stat-icon i {
+            font-size: 1.5rem;
+            color: #92d35e;
+        }
+        
+        .stat-card .stat-number {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #4b4b4b;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .stat-label {
+            color: #9d9d9d;
+            font-size: 0.9rem;
+        }
+        
+        /* Job Applications Section */
+        .job-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .job-card .company-logo {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border: 1px solid #e7e7e7;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+        
+        .job-card .company-logo img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .job-card .company-name {
+            font-weight: 900;
+            color: #4b4b4b;
+            margin-bottom: 5px;
+        }
+        
+        .job-card .job-title {
+            font-weight: 700;
+            color: #4b4b4b;
+        }
+        
+        .job-card .job-meta {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 15px;
+            border-top: 1px solid #e7e7e7;
+            margin-top: 15px;
+            color: #9d9d9d;
+        }
+        
+        .job-card .job-meta .salary {
+            color: #92d35e;
+            font-weight: 700;
+        }
+        
+        /* Profile Completion Section */
+        .profile-completion {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-completion .progress {
+            height: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .profile-completion .progress-bar {
+            background-color: #92d35e;
+        }
+        
+        .profile-completion .completion-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .profile-completion .step {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .profile-completion .step-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #f1f7eb;
+            color: #92d35e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+        }
+        
+        .profile-completion .step.completed .step-icon {
+            background-color: #92d35e;
+            color: white;
+        }
+        
+        /* Upcoming Interviews Section */
+        .interview-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e7e7e7;
+        }
+        
+        .interview-card:last-child {
+            border-bottom: none;
+        }
+        
+        .interview-card .interview-date {
+            min-width: 60px;
+            text-align: center;
+            margin-right: 15px;
+        }
+        
+        .interview-card .interview-date .day {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #4b4b4b;
+        }
+        
+        .interview-card .interview-date .month {
+            font-size: 0.8rem;
+            color: #9d9d9d;
+        }
+        
+        .interview-card .interview-info .company {
+            font-weight: 700;
+            color: #4b4b4b;
+        }
+        
+        .interview-card .interview-info .position {
+            color: #9d9d9d;
+            font-size: 0.9rem;
+        }
+        
+        .interview-card .interview-info .time {
+            color: #92d35e;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        /* Button Styles */
+        .main-btn {
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            background-color: #92d35e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .main-btn:hover {
+            color: white;
+            background-color: #4b4b4b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .outline-btn {
+            text-align: center;
+            text-decoration: none;
+            color: #4b4b4b;
+            font-weight: 600;
+            background-color: transparent;
+            border: 1px solid #e7e7e7;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .outline-btn:hover {
+            color: #4b4b4b;
+            border-color: #92d35e;
+            background-color: #f1f7eb;
+        }
+        
+        /* Resume Upload Area */
+        .resume-upload {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #e7e7e7;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: #92d35e;
+            background-color: #f1f7eb;
+        }
+        
+        .upload-area i {
+            font-size: 2rem;
+            color: #92d35e;
+            margin-bottom: 10px;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 991px) {
+            .sidebar {
+                width: 70px;
+                padding: 15px 10px;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .search-bar {
+                max-width: 200px;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+                padding: 10px;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .sidebar .nav {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+            }
+            
+            .sidebar .nav-link {
+                margin-right: 5px;
+                margin-bottom: 0;
+                padding: 10px;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 5px;
+            }
+            
+            .sidebar .nav-link span {
+                display: inline;
+                font-size: 0.8rem;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding-top: 76px;
+            }
+            
+            .navbar .search-bar {
+                margin: 10px 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="cdashboard.html">
+                <img src="../static/img/Company_logo.png" alt="Company Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Added Search Bar -->
+                <div class="search-bar mx-auto">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" class="form-control" placeholder="Search jobs, companies, or keywords...">
+                </div>
+                
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link notification-icon" href="#">
+                            <i class="bi bi-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% if request.session.user_id and profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'img/team-1.jpg' %}{% endif %}" 
+                                 alt="{{ user.username }}" 
+                                 class="user-avatar me-2"
+                                 id="navbarAvatar"
+                                 style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                            <span>{{ user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="cprofile.html">My Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout(); return false;">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="cdashboard.html">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="cprofile.html">
+                    <i class="bi bi-person"></i>
+                    <span>My Profile</span>
+                </a>
+            </li>
+            <!-- Added Search Jobs Link -->
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="bi bi-search"></i>
+                    <span>Search Jobs</span>
+                </a>
+            </li>
+            <!-- Added Job Section -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'jobs_list' %}">
+                    <i class="bi bi-briefcase-fill"></i>
+                    <span>Jobs</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'applied_jobs' %}">
+                    <i class="bi bi-briefcase"></i>
+                    <span>Applied Jobs</span>
+                </a>
+            </li>
+            
+            
+            
+           
+            <li class="nav-item mt-4">
+                <a class="nav-link text-danger" href="#" onclick="logout(); return false;">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- Welcome Banner -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="stat-card bg-light p-4">
+                        <h2>Welcome back, <span class="green">{{ user.username }}</span></h2>
+                        <p>Here's what's happening with your job search today.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="row mb-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card text-center">
+                        <div class="stat-icon mx-auto">
+                            <i class="bi bi-briefcase"></i>
+                        </div>
+                        <h3 class="stat-number">12</h3>
+                        <p class="stat-label">Applications</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card text-center">
+                        <div class="stat-icon mx-auto">
+                            <i class="bi bi-bookmark"></i>
+                        </div>
+                        <h3 class="stat-number">5</h3>
+                        <p class="stat-label">Saved Jobs</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card text-center">
+                        <div class="stat-icon mx-auto">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <h3 class="stat-number">3</h3>
+                        <p class="stat-label">Interviews</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card text-center">
+                        <div class="stat-icon mx-auto">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                        <h3 class="stat-number">8</h3>
+                        <p class="stat-label">Profile Views</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Completion Section -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="profile-completion">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h4 class="mb-0">Profile Completion</h4>
+                            <span class="green fw-bold">75%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p class="mt-2">Complete your profile to increase job match chances.</p>
+                        <div class="completion-steps">
+                            <div class="step completed">
+                                <div class="step-icon">
+                                    <i class="bi bi-check"></i>
+                                </div>
+                                <span>Basic Info</span>
+                            </div>
+                            <div class="step completed">
+                                <div class="step-icon">
+                                    <i class="bi bi-check"></i>
+                                </div>
+                                <span>Education</span>
+                            </div>
+                            <div class="step completed">
+                                <div class="step-icon">
+                                    <i class="bi bi-check"></i>
+                                </div>
+                                <span>Experience</span>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon">
+                                    <i class="bi bi-star"></i>
+                                </div>
+                                <span>Skills</span>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <span>Resume</span>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="#" class="main-btn">Complete Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Applications and Interviews Section -->
+            <div class="row mb-4">
+                <div class="col-lg-8">
+                    <div class="job-card mb-4">
+                        <h4 class="mb-4">Recent Applications</h4>
+                        <div class="row mb-4" id="recentApplications">
+                            <!-- Applications will be dynamically populated here -->
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="{% url 'applied_jobs' %}" class="outline-btn">View All Applications</a>
+                        </div>
+                    </div>
+
+                    <!-- Resume Upload Section -->
+                    <div class="resume-upload">
+                        <h4 class="mb-3">Resume</h4>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-file-earmark-text me-2 green"></i>
+                            <div>
+                                <p class="mb-0 fw-bold">JohnDoe_Resume.pdf</p>
+                                <small>Uploaded on April 5, 2025</small>
+                            </div>
+                            <div class="ms-auto">
+                                <a href="#" class="outline-btn btn-sm"><i class="bi bi-download me-1"></i> Download</a>
+                            </div>
+                        </div>
+                        <div class="upload-area mt-3">
+                            <i class="bi bi-cloud-arrow-up"></i>
+                            <h5>Upload New Resume</h5>
+                            <p class="mb-0">Drag & drop your file here or <span class="green fw-bold">browse</span></p>
+                            <small>Supported formats: PDF, DOCX, RTF (Max 5MB)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Upcoming Interviews Section -->
+                    <div class="job-card">
+                        <h4 class="mb-4">Upcoming Interviews</h4>
+                        <div class="interview-card">
+                            <div class="interview-date">
+                                <div class="day">15</div>
+                                <div class="month">APR</div>
+                            </div>
+                            <div class="interview-info">
+                                <div class="company">Go! SM</div>
+                                <div class="position">Senior UX Designer</div>
+                                <div class="time"><i class="bi bi-clock me-1"></i> 2:00 PM</div>
+                            </div>
+                        </div>
+                        <div class="interview-card">
+                            <div class="interview-date">
+                                <div class="day">18</div>
+                                <div class="month">APR</div>
+                            </div>
+                            <div class="interview-info">
+                                <div class="company">Point Design</div>
+                                <div class="position">UI Designer</div>
+                                <div class="time"><i class="bi bi-clock me-1"></i> 10:30 AM</div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="#" class="main-btn">View Calendar</a>
+                        </div>
+                    </div>
+
+                    <!-- Recommended Skills Section -->
+                    <div class="job-card mt-4">
+                        <h4 class="mb-3">Trending Skills</h4>
+                        <p>Add these to match more job opportunities</p>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <span class="badge bg-light text-dark p-2">UI/UX Design</span>
+                            <span class="badge bg-light text-dark p-2">Figma Mastery</span>
+                            <span class="badge bg-light text-dark p-2">Design Systems</span>
+                            <span class="badge bg-light text-dark p-2">Product Thinking</span>
+                            <span class="badge bg-light text-dark p-2">User Research</span>
+                            <span class="badge bg-light text-dark p-2">Prototyping</span>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="#" class="outline-btn">Add Skills</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommended Jobs Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h3 class="mb-4">Recommended <span class="green">Jobs</span></h3>
+                </div>
+                <div class="col-md-4">
+                    <div class="job-card h-100">
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="company-logo me-3">
+                                <img src="{% static 'img/company-logo.png' %}" alt="Create Paper Logo">
+                            </div>
+                            <div>
+                                <h5 class="company-name mb-1">Create Paper</h5>
+                                <p class="job-title mb-2">UX/UI Designer</p>
+                                <div class="d-flex mt-3 mb-3">
+                                    <span class="badge bg-light text-dark p-2 me-2">Full Time</span>
+                                    <span class="badge bg-light text-dark p-2">Remote</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mb-3">Create innovative user experiences for digital products in the education space...</p>
+                        <div class="job-meta">
+                            <span>Location: <strong>Remote</strong></span>
+                            <span>Salary: <span class="salary">$75,000</span></span>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="#" class="main-btn">Apply Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="job-card h-100">
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="company-logo me-3">
+                                <img src="{% static 'img/company-logo.png' %}" alt="TechField Logo">
+                            </div>
+                            <div>
+                                <h5 class="company-name mb-1">TechField</h5>
+                                <p class="job-title mb-2">Product Designer</p>
+                                <div class="d-flex mt-3 mb-3">
+                                    <span class="badge bg-light text-dark p-2 me-2">Full Time</span>
+                                    <span class="badge bg-light text-dark p-2">Hybrid</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mb-3">Join our product team to design user-centered experiences for enterprise software...</p>
+                        <div class="job-meta">
+                            <span>Location: <strong>Berlin</strong></span>
+                            <span>Salary: <span class="salary">$90,000</span></span>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="#" class="main-btn">Apply Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="job-card h-100">
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="company-logo me-3">
+                                <img src="{% static 'img/company-logo.png' %}" alt="InnovateTech Logo">
+                            </div>
+                            <div>
+                                <h5 class="company-name mb-1">InnovateTech</h5>
+                                <p class="job-title mb-2">UI/UX Researcher</p>
+                                <div class="d-flex mt-3 mb-3">
+                                    <span class="badge bg-light text-dark p-2 me-2">Contract</span>
+                                    <span class="badge bg-light text-dark p-2">On-site</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mb-3">Conduct user research and usability testing to improve our mobile applications...</p>
+                        <div class="job-meta">
+                            <span>Location: <strong>Munich</strong></span>
+                            <span>Salary: <span class="salary">$70,000</span></span>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="#" class="main-btn">Apply Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 text-center mt-4">
+                    <a href="#" class="outline-btn">View All Recommended Jobs</a>
+                </div>
+            </div>
+
+            <!-- Career Tips & Resources -->
+            <!-- <div class="row">
+                <div class="col-12">
+                    <h3 class="mb-4">Career <span class="green">Tips & Resources</span></h3>
+                </div>
+                <div class="col-md-4">
+                    <div class="job-card h-100">
+                        <img src="{% static 'img/career-tips-1.jpg' %}" alt="Career Article" class="img-fluid rounded mb-3">
+                        <h5>10 Portfolio Tips for UX Designers</h5>
+                        <p class="mb-3">Learn how to showcase your work effectively and stand out from the competition.</p>
+                        <div class="text-end">
+                            <a href="#" class="outline-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="job-card h-100">
+                        <img src="{% static 'img/career-tips-2.jpg' %}" alt="Career Article" class="img-fluid rounded mb-3">
+                        <h5>Preparing for Design Interviews</h5>
+                        <p class="mb-3">Expert advice on acing design challenges and portfolio presentations.</p>
+                        <div class="text-end">
+                            <a href="#" class="outline-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="job-card h-100">
+                        <img src="{% static 'img/career-tips-3.jpg' %}" alt="Career Article" class="img-fluid rounded mb-3">
+                        <h5>UX Design Trends for 2025</h5>
+                        <p class="mb-3">Stay ahead of the curve with these emerging design patterns and technologies.</p>
+                        <div class="text-end">
+                            <a href="#" class="outline-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Footer -->
+            <footer class="mt-5 pt-4 border-top">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>&copy; 2025 TalentHive. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="#" class="me-3">Privacy Policy</a>
+                        <a href="#" class="me-3">Terms of Service</a>
+                        <a href="#">Contact Us</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <script src="../static/js/nav-bg.js"></script>
+    <!-- Bootstrap JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <script>
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Function to get profile data
+        function getProfile() {
+            fetch('/api/candidate/profile/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.profile) {
+                    // Update navbar user info
+                    const navbarUserSpan = document.querySelector('.navbar .dropdown-toggle span');
+                    if (navbarUserSpan) {
+                        navbarUserSpan.textContent = `${data.profile.first_name || ''} ${data.profile.last_name || ''}`;
+                    }
+
+                    // Update avatar
+                    const avatarUrl = data.profile.avatar_url || '{% static "img/team-1.jpg" %}';
+                    
+                    // Update navbar avatar
+                    const navbarAvatar = document.getElementById('navbarAvatar');
+                    if (navbarAvatar) {
+                        navbarAvatar.src = avatarUrl;
+                    }
+
+                    // Update welcome message
+                    const welcomeSpan = document.querySelector('.green');
+                    if (welcomeSpan) {
+                        welcomeSpan.textContent = `${data.profile.first_name || ''} ${data.profile.last_name || ''}`;
+                    }
+
+                    // Update profile completion
+                    updateProfileCompletion(data.profile);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching profile:', error);
+            });
+        }
+
+        // Function to get dashboard stats
+        function getDashboardStats() {
+            fetch('/api/applications/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.applications) {
+                    updateDashboardStats(data.applications);
+                    updateRecentApplications(data.applications);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching dashboard stats:', error);
+            });
+        }
+
+        // Function to update dashboard stats
+        function updateDashboardStats(applications) {
+            const stats = {
+                total: applications.length,
+                saved: applications.filter(app => app.status === 'saved').length,
+                interviews: applications.filter(app => app.status === 'interviewed').length,
+                views: applications.filter(app => app.status === 'viewed').length
+            };
+
+            // Update stats numbers
+            document.querySelector('.stat-number:nth-child(1)').textContent = stats.total;
+            document.querySelector('.stat-number:nth-child(2)').textContent = stats.saved;
+            document.querySelector('.stat-number:nth-child(3)').textContent = stats.interviews;
+            document.querySelector('.stat-number:nth-child(4)').textContent = stats.views;
+        }
+
+        // Function to update recent applications
+        function updateRecentApplications(applications) {
+            const recentApplicationsContainer = document.getElementById('recentApplications');
+            if (!recentApplicationsContainer) return;
+
+            // Sort applications by date and get the most recent ones
+            const recentApps = applications
+                .sort((a, b) => new Date(b.applied_date) - new Date(a.applied_date))
+                .slice(0, 2);
+
+            if (recentApps.length === 0) {
+                recentApplicationsContainer.innerHTML = `
+                    <div class="col-12 text-center">
+                        <p class="text-muted">No applications yet. Start applying for jobs!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            recentApps.forEach(app => {
+                html += `
+                    <div class="col-md-12">
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="company-logo me-3">
+                                ${app.job.company_logo ? 
+                                    `<img src="${app.job.company_logo}" alt="${app.job.company_name}">` :
+                                    `<i class="bi bi-building text-muted"></i>`
+                                }
+                            </div>
+                            <div>
+                                <h5 class="company-name mb-1">${app.job.company_name}</h5>
+                                <p class="job-title mb-2">${app.job.title}</p>
+                                <p class="mb-1">Applied on ${new Date(app.applied_date).toLocaleDateString()}</p>
+                                <p class="green fw-bold mb-0">Status: ${getStatusText(app.status)}</p>
+                            </div>
+                        </div>
+                        <div class="job-meta">
+                            <span>Location: <strong>${app.job.location || 'Not specified'}</strong></span>
+                            <span>Salary: <span class="salary">${app.job.hide_salary ? 'Not disclosed' : app.job.salary}</span></span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            recentApplicationsContainer.innerHTML = html;
+        }
+
+        // Function to update profile completion
+        function updateProfileCompletion(profile) {
+            const steps = [
+                { name: 'Basic Info', completed: !!(profile.first_name && profile.last_name) },
+                { name: 'Education', completed: !!(profile.education && profile.education.length > 0) },
+                { name: 'Experience', completed: !!(profile.work_experience && profile.work_experience.length > 0) },
+                { name: 'Skills', completed: !!(profile.skills && profile.skills.length > 0) },
+                { name: 'Resume', completed: !!(profile.resume) }
+            ];
+
+            const completedSteps = steps.filter(step => step.completed).length;
+            const completionPercentage = (completedSteps / steps.length) * 100;
+
+            // Update completion percentage
+            document.querySelector('.profile-completion .green').textContent = `${Math.round(completionPercentage)}%`;
+            document.querySelector('.profile-completion .progress-bar').style.width = `${completionPercentage}%`;
+
+            // Update step icons
+            steps.forEach((step, index) => {
+                const stepElement = document.querySelectorAll('.step')[index];
+                if (step.completed) {
+                    stepElement.classList.add('completed');
+                    stepElement.querySelector('.step-icon').innerHTML = '<i class="bi bi-check"></i>';
+                } else {
+                    stepElement.classList.remove('completed');
+                    stepElement.querySelector('.step-icon').innerHTML = '<i class="bi bi-star"></i>';
+                }
+            });
+        }
+
+        // Helper function to get status text
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Under Review',
+                'reviewing': 'Under Review',
+                'shortlisted': 'Shortlisted',
+                'rejected': 'Not Selected',
+                'accepted': 'Application Successful',
+                'interviewed': 'Interview Scheduled'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Load all data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            getProfile();
+            getDashboardStats();
+        });
+
+        // Function to refresh avatar after upload
+        function refreshAvatar() {
+            getProfile();
+        }
+
+        // Listen for storage events (when avatar is updated in another tab)
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'avatar_updated') {
+                getProfile();
+            }
+        });
+
+        async function logout() {
+            try {
+                const response = await fetch('/logout/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Clear any stored data
+                    localStorage.clear();
+                    // Redirect to login page
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert(data.error || 'Logout failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during logout');
+            }
+        }
+    </script>
+</body>
+</html>

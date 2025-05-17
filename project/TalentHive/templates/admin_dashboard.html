@@ -1,0 +1,1639 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Job Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        :root {
+            --sidebar-width: 250px;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: #2c3e50;
+            padding-top: 20px;
+            color: white;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+        }
+
+        .nav-link {
+            color: white;
+            padding: 10px 20px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #34495e;
+            color: white;
+        }
+
+        .nav-link.active {
+            background-color: #3498db;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+        }
+
+        .company-logo-container {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .company-logo-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .company-logo-container:active {
+            transform: scale(0.95);
+        }
+
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #3498db;
+            font-size: 1.5rem;
+            z-index: 1;
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+
+        .loading-spinner.hidden {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .company-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            padding: 4px;
+            will-change: transform, opacity;
+        }
+
+        .company-logo.loading {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .company-logo.error {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .company-logo.loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .company-logo.loaded:hover {
+            filter: brightness(1.1);
+        }
+
+        .logo-preview {
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: contain;
+            display: none;
+            margin-top: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            padding: 5px;
+        }
+
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            background-color: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .message-preview {
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+        
+        .table-warning {
+            background-color: rgba(255, 243, 205, 0.5);
+        }
+        
+        .btn-group {
+            gap: 5px;
+        }
+
+        .message-header {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 1rem;
+        }
+        
+        .message-content {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            white-space: pre-wrap;
+        }
+        
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            background-color: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="text-center mb-4">
+            <h4>Admin Dashboard</h4>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-section="view-companies">
+                    <i class="fas fa-list me-2"></i> View Companies
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-section="create-company">
+                    <i class="fas fa-plus-circle me-2"></i> Create Company
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-section="manage-hr">
+                    <i class="fas fa-users me-2"></i> Manage HR
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-section="manage-users">
+                    <i class="fas fa-user me-2"></i> Manage Users
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-section="messages">
+                    <i class="fas fa-envelope me-2"></i> Messages
+                    <span class="badge bg-danger ms-2" id="sidebarUnreadCount">0</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-section="profile">
+                    <i class="fas fa-user-circle me-2"></i> My Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-danger" href="#" onclick="logout(); return false;">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Profile Section -->
+        <div id="profile" class="section" style="display: none;">
+            <h2 class="mb-4">My Profile</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="card-title">Admin Details</h5>
+                            <div id="adminDetails">
+                                <p><strong>Username:</strong> <span id="adminUsername"></span></p>
+                                <p><strong>Email:</strong> <span id="adminEmail"></span></p>
+                                <p><strong>Mobile:</strong> <span id="adminMobile"></span></p>
+                                <p><strong>Role:</strong> <span id="adminRole"></span></p>
+                                <p><strong>Status:</strong> <span id="adminStatus"></span></p>
+                                <button class="btn btn-primary mt-3" onclick="editAdmin()">Edit Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Companies Section -->
+        <div id="view-companies" class="section">
+            <h2 class="mb-4">View Companies</h2>
+            <div class="filter-section">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="companySearch" placeholder="Search companies...">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" id="industryFilter">
+                            <option value="">All Industries</option>
+                            <option value="it">Information Technology</option>
+                            <option value="finance">Finance</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="education">Education</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="retail">Retail</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" id="sizeFilter">
+                            <option value="">All Sizes</option>
+                            <option value="1-10">1-10 employees</option>
+                            <option value="11-50">11-50 employees</option>
+                            <option value="51-200">51-200 employees</option>
+                            <option value="201-500">201-500 employees</option>
+                            <option value="501-1000">501-1000 employees</option>
+                            <option value="1000+">1000+ employees</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Logo</th>
+                            <th>Company Name</th>
+                            <th>Email</th>
+                            <th>Industry</th>
+                            <th>Size</th>
+                            <th>Location</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="companiesTableBody">
+                        <!-- Companies will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Create Company Section -->
+        <div id="create-company" class="section" style="display: none;">
+            <h2 class="mb-4">Create New Company</h2>
+            <div class="card">
+                <div class="card-body">
+                    <form id="createCompanyForm">
+                        <div class="mb-3">
+                            <label for="company_name" class="form-label">Company Name</label>
+                            <input type="text" class="form-control" id="company_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="company_email" class="form-label">Company Email</label>
+                            <input type="email" class="form-control" id="company_email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="industry" class="form-label">Industry</label>
+                            <select class="form-control" id="industry" required>
+                                <option value="">Select Industry</option>
+                                <option value="it">Information Technology</option>
+                                <option value="finance">Finance</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="education">Education</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="retail">Retail</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="company_size" class="form-label">Company Size</label>
+                            <select class="form-control" id="company_size" required>
+                                <option value="">Select Company Size</option>
+                                <option value="1-10">1-10 employees</option>
+                                <option value="11-50">11-50 employees</option>
+                                <option value="51-200">51-200 employees</option>
+                                <option value="201-500">201-500 employees</option>
+                                <option value="501-1000">501-1000 employees</option>
+                                <option value="1000+">1000+ employees</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="company_logo" class="form-label">Company Logo</label>
+                            <input type="file" class="form-control" id="company_logo" accept="image/*">
+                            <img id="logoPreview" class="logo-preview mt-2" alt="Logo Preview">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="createCompany()">Create Company</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage HR Section -->
+        <div id="manage-hr" class="section" style="display: none;">
+            <h2 class="mb-4">Manage HR</h2>
+            <div class="filter-section">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" id="hrSearch" placeholder="Search HR...">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" id="hrCompanyFilter" placeholder="Search by company email...">
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Mobile Number</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hrTableBody">
+                        <!-- HR will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Manage Users Section -->
+        <div id="manage-users" class="section" style="display: none;">
+            <h2 class="mb-4">Manage Users</h2>
+            <div class="filter-section">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="userSearch" placeholder="Search users...">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" id="userRoleFilter">
+                            <option value="user" selected>User</option>
+                            <option value="hr">HR</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" id="userStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="verified">Verified</option>
+                            <option value="unverified">Unverified</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Messages Section -->
+        <div id="messages" class="section" style="display: none;">
+            <h2 class="mb-4">Contact Messages</h2>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0">All Messages</h5>
+                        <small class="text-muted">View and manage contact form submissions</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-primary me-2" id="unreadMessagesCount">0</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadContactMessages()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Message</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contactMessagesTable">
+                                <!-- Messages will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        <input type="hidden" id="editUserId">
+                        <div class="mb-3">
+                            <label for="editUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="editUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRole" class="form-label">Role</label>
+                            <select class="form-control" id="editRole" required>
+                                <option value="user">User</option>
+                                <option value="hr">HR</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStatus" class="form-label">Status</label>
+                            <select class="form-control" id="editStatus" required>
+                                <option value="true">Verified</option>
+                                <option value="false">Unverified</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="updateUser()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit HR Modal -->
+    <div class="modal fade" id="editHRModal" tabindex="-1" aria-labelledby="editHRModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editHRModalLabel">Edit HR</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editHRForm">
+                        <input type="hidden" id="editHRId">
+                        <div class="mb-3">
+                            <label for="editHRUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="editHRUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editHREmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editHREmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editHRMobile" class="form-label">Mobile Number</label>
+                            <input type="text" class="form-control" id="editHRMobile" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editHRStatus" class="form-label">Status</label>
+                            <select class="form-control" id="editHRStatus" required>
+                                <option value="true">Verified</option>
+                                <option value="false">Unverified</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Associated Companies</label>
+                            <div id="hrCompaniesList" class="list-group">
+                                <!-- Companies will be listed here -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="updateHR()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Admin Modal -->
+    <div class="modal fade" id="editAdminModal" tabindex="-1" aria-labelledby="editAdminModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAdminModalLabel">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAdminForm">
+                        <div class="mb-3">
+                            <label for="editAdminUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="editAdminUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAdminEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editAdminEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAdminMobile" class="form-label">Mobile Number</label>
+                            <input type="text" class="form-control" id="editAdminMobile" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAdminPassword" class="form-label">New Password (leave blank to keep current)</label>
+                            <input type="password" class="form-control" id="editAdminPassword">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAdminConfirmPassword" class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="editAdminConfirmPassword">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="updateAdmin()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Message Modal -->
+    <div class="modal fade" id="viewMessageModal" tabindex="-1" aria-labelledby="viewMessageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewMessageModalLabel">Message Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="message-header mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="avatar-circle me-3" id="modalAvatar">
+                                <!-- Initial will be inserted here -->
+                            </div>
+                            <div>
+                                <h6 class="mb-1" id="modalName"></h6>
+                                <a href="#" class="text-decoration-none" id="modalEmail"></a>
+                            </div>
+                        </div>
+                        <div class="text-muted" id="modalDate"></div>
+                    </div>
+                    <div class="message-content">
+                        <p id="modalMessage" class="mb-0"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="modalMarkAsRead">Mark as Read</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Company Modal -->
+    <div class="modal fade" id="editCompanyModal" tabindex="-1" aria-labelledby="editCompanyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCompanyModalLabel">Edit Company</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCompanyForm">
+                        <input type="hidden" id="editCompanyId">
+                        <div class="mb-3">
+                            <label for="editCompanyName" class="form-label">Company Name</label>
+                            <input type="text" class="form-control" id="editCompanyName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCompanyEmail" class="form-label">Company Email</label>
+                            <input type="email" class="form-control" id="editCompanyEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editIndustry" class="form-label">Industry</label>
+                            <select class="form-control" id="editIndustry" required>
+                                <option value="">Select Industry</option>
+                                <option value="it">Information Technology</option>
+                                <option value="finance">Finance</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="education">Education</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="retail">Retail</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCompanySize" class="form-label">Company Size</label>
+                            <select class="form-control" id="editCompanySize" required>
+                                <option value="">Select Company Size</option>
+                                <option value="1-10">1-10 employees</option>
+                                <option value="11-50">11-50 employees</option>
+                                <option value="51-200">51-200 employees</option>
+                                <option value="201-500">201-500 employees</option>
+                                <option value="501-1000">501-1000 employees</option>
+                                <option value="1000+">1000+ employees</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editLocation" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="editLocation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCompanyLogo" class="form-label">Company Logo</label>
+                            <input type="file" class="form-control" id="editCompanyLogo" accept="image/*">
+                            <img id="editLogoPreview" class="logo-preview mt-2" alt="Logo Preview">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="updateCompany()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Handle sidebar navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                // Add active class to clicked link
+                this.classList.add('active');
+                // Hide all sections
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                // Show selected section
+                const sectionId = this.getAttribute('data-section');
+                document.getElementById(sectionId).style.display = 'block';
+            });
+        });
+
+        // Load companies table
+        async function loadCompanies() {
+            try {
+                const response = await fetch('/dashboard/companies/');
+                const data = await response.json();
+                
+                const tbody = document.getElementById('companiesTableBody');
+                tbody.innerHTML = '';
+                
+                data.companies.forEach(company => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>
+                                <div class="company-logo-container">
+                                    ${company.company_logo ? 
+                                        `<img src="/media/${company.company_logo}" alt="${company.company_name}" class="company-logo">` :
+                                        `<div class="avatar-circle">${company.company_name.charAt(0)}</div>`
+                                    }
+                                </div>
+                            </td>
+                            <td>${company.company_name}</td>
+                            <td>${company.company_email}</td>
+                            <td>${company.industry}</td>
+                            <td>${company.company_size}</td>
+                            <td>${company.location}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-primary" onclick="editCompany(${company.id})">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteCompany(${company.id})">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to load companies');
+            }
+        }
+
+        // Load HR table
+        async function loadHR() {
+            try {
+                const response = await fetch('/dashboard/companies/list/');
+                const data = await response.json();
+                const tbody = document.getElementById('hrTableBody');
+                tbody.innerHTML = '';
+                
+                data.hr.forEach(hr => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${hr.username}</td>
+                            <td>${hr.email}</td>
+                            <td>${hr.mobile_number}</td>
+                            <td>${hr.is_verified ? 'Verified' : 'Unverified'}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="editHR(${hr.id})">Edit</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteHR(${hr.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Load users table
+        async function loadUsers() {
+            try {
+                const response = await fetch('/dashboard/users/');
+                const data = await response.json();
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = '';
+                
+                data.users.forEach(user => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${user.username}</td>
+                            <td>${user.email}</td>
+                            <td>${user.role}</td>
+                            <td>${user.is_verified ? 'Verified' : 'Unverified'}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="editUser(${user.id})">Edit</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Load data when switching sections
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                const section = this.getAttribute('data-section');
+                if (section === 'view-companies') {
+                    loadCompanies();
+                } else if (section === 'create-company') {
+                    // Reset form when switching to create company section
+                    document.getElementById('createCompanyForm').reset();
+                    document.getElementById('logoPreview').style.display = 'none';
+                } else if (section === 'manage-hr') {
+                    loadHR();
+                } else if (section === 'manage-users') {
+                    loadUsers();
+                } else if (section === 'profile') {
+                    loadAdminDetails();
+                } else if (section === 'messages') {
+                    loadContactMessages();
+                }
+            });
+        });
+
+        // Load initial data
+        loadCompanies();
+
+        // Preview company logo
+        document.getElementById('company_logo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('logoPreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Create company function
+        async function createCompany() {
+            const formData = new FormData();
+            formData.append('company_name', document.getElementById('company_name').value);
+            formData.append('company_email', document.getElementById('company_email').value);
+            formData.append('industry', document.getElementById('industry').value);
+            formData.append('company_size', document.getElementById('company_size').value);
+            formData.append('location', document.getElementById('location').value);
+            
+            const logoFile = document.getElementById('company_logo').files[0];
+            if (logoFile) {
+                formData.append('company_logo', logoFile);
+            }
+
+            try {
+                const response = await fetch('/dashboard/companies/create/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(data.message);
+                    // Reset form
+                    document.getElementById('createCompanyForm').reset();
+                    document.getElementById('logoPreview').style.display = 'none';
+                    // Reload companies list
+                    loadCompanies();
+                    // Switch to view companies section
+                    document.querySelector('[data-section="view-companies"]').click();
+                } else {
+                    alert(data.error || "Failed to create company.");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Something went wrong!");
+            }
+        }
+
+        function loadAdminDetails() {
+            fetch('/dashboard/admin-details/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Error:', data.error);
+                        return;
+                    }
+                    document.getElementById('adminUsername').textContent = data.username;
+                    document.getElementById('adminEmail').textContent = data.email;
+                    document.getElementById('adminMobile').textContent = data.mobile_number;
+                    document.getElementById('adminRole').textContent = data.role;
+                    document.getElementById('adminStatus').textContent = data.is_verified ? 'Verified' : 'Not Verified';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function logout() {
+            fetch('/logout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Edit user function
+        async function editUser(userId) {
+            try {
+                const response = await fetch(`/dashboard/users/${userId}/`);
+                const user = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('editUserId').value = user.id;
+                    document.getElementById('editUsername').value = user.username;
+                    document.getElementById('editEmail').value = user.email;
+                    document.getElementById('editRole').value = user.role;
+                    document.getElementById('editStatus').value = user.is_verified.toString();
+                    
+                    const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                    editUserModal.show();
+                } else {
+                    alert('Failed to fetch user details');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong while fetching user details');
+            }
+        }
+
+        // Update user function
+        async function updateUser() {
+            const userId = document.getElementById('editUserId').value;
+            const userData = {
+                username: document.getElementById('editUsername').value,
+                email: document.getElementById('editEmail').value,
+                role: document.getElementById('editRole').value,
+                is_verified: document.getElementById('editStatus').value === 'true'
+            };
+
+            try {
+                const response = await fetch(`/dashboard/users/${userId}/update/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('User updated successfully');
+                    const editUserModal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
+                    editUserModal.hide();
+                    loadUsers(); // Reload the users table
+                } else {
+                    alert(data.error || 'Failed to update user');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong while updating user');
+            }
+        }
+
+        // Delete user function
+        async function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                try {
+                    const response = await fetch(`/dashboard/users/${userId}/delete/`, {
+                        method: 'DELETE'
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert('User deleted successfully');
+                        loadUsers(); // Reload the users table
+                    } else {
+                        alert(data.error || 'Failed to delete user');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Something went wrong while deleting user');
+                }
+            }
+        }
+
+        // Add search and filter functionality for users
+        document.getElementById('userSearch').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.getElementById('usersTableBody').getElementsByTagName('tr');
+            
+            Array.from(rows).forEach(row => {
+                const username = row.cells[0].textContent.toLowerCase();
+                const email = row.cells[1].textContent.toLowerCase();
+                if (username.includes(searchTerm) || email.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('userRoleFilter').addEventListener('change', function(e) {
+            const role = e.target.value.toLowerCase();
+            const rows = document.getElementById('usersTableBody').getElementsByTagName('tr');
+            
+            Array.from(rows).forEach(row => {
+                const userRole = row.cells[2].textContent.toLowerCase();
+                if (role === '' || userRole === role) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('userStatusFilter').addEventListener('change', function(e) {
+            const status = e.target.value.toLowerCase();
+            const rows = document.getElementById('usersTableBody').getElementsByTagName('tr');
+            
+            Array.from(rows).forEach(row => {
+                const userStatus = row.cells[3].textContent.toLowerCase();
+                if (status === '' || userStatus === status) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Edit HR function
+        async function editHR(hrId) {
+            try {
+                const response = await fetch(`/dashboard/hr/${hrId}/`);
+                const hr = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('editHRId').value = hr.id;
+                    document.getElementById('editHRUsername').value = hr.username;
+                    document.getElementById('editHREmail').value = hr.email;
+                    document.getElementById('editHRMobile').value = hr.mobile_number;
+                    document.getElementById('editHRStatus').value = hr.is_verified.toString();
+                    
+                    // Update companies list
+                    const companiesList = document.getElementById('hrCompaniesList');
+                    companiesList.innerHTML = '';
+                    if (hr.companies && hr.companies.length > 0) {
+                        hr.companies.forEach(company => {
+                            companiesList.innerHTML += `
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-0">${company.name}</h6>
+                                            <small class="text-muted">${company.email}</small>
+                                        </div>
+                                        <button class="btn btn-sm btn-danger" onclick="removeHRFromCompany(${hr.id}, ${company.id})">
+                                            Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        companiesList.innerHTML = '<div class="list-group-item">No companies associated</div>';
+                    }
+                    
+                    const editHRModal = new bootstrap.Modal(document.getElementById('editHRModal'));
+                    editHRModal.show();
+                } else {
+                    alert('Failed to fetch HR details');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong while fetching HR details');
+            }
+        }
+
+        // Update HR function
+        async function updateHR() {
+            const hrId = document.getElementById('editHRId').value;
+            const hrData = {
+                username: document.getElementById('editHRUsername').value,
+                email: document.getElementById('editHREmail').value,
+                mobile_number: document.getElementById('editHRMobile').value,
+                is_verified: document.getElementById('editHRStatus').value === 'true'
+            };
+
+            try {
+                const response = await fetch(`/dashboard/hr/${hrId}/update/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(hrData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('HR updated successfully');
+                    const editHRModal = bootstrap.Modal.getInstance(document.getElementById('editHRModal'));
+                    editHRModal.hide();
+                    loadHR(); // Reload the HR table
+                } else {
+                    alert(data.error || 'Failed to update HR');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong while updating HR');
+            }
+        }
+
+        // Delete HR function
+        async function deleteHR(hrId) {
+            if (confirm('Are you sure you want to delete this HR? This action cannot be undone.')) {
+                try {
+                    const response = await fetch(`/dashboard/hr/${hrId}/delete/`, {
+                        method: 'DELETE'
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert('HR deleted successfully');
+                        loadHR(); // Reload the HR table
+                    } else {
+                        alert(data.error || 'Failed to delete HR');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Something went wrong while deleting HR');
+                }
+            }
+        }
+
+        // Remove HR from company function
+        async function removeHRFromCompany(hrId, companyId) {
+            if (confirm('Are you sure you want to remove this HR from the company?')) {
+                try {
+                    const response = await fetch('/api/hr/leave-company/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            hr_id: hrId,
+                            company_id: companyId
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert('HR removed from company successfully');
+                        editHR(hrId); // Refresh the HR details
+                    } else {
+                        alert(data.error || 'Failed to remove HR from company');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Something went wrong while removing HR from company');
+                }
+            }
+        }
+
+        // Add search and filter functionality for HR
+        document.getElementById('hrSearch').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.getElementById('hrTableBody').getElementsByTagName('tr');
+            
+            Array.from(rows).forEach(row => {
+                const username = row.cells[0].textContent.toLowerCase();
+                const email = row.cells[1].textContent.toLowerCase();
+                if (username.includes(searchTerm) || email.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('hrCompanyFilter').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.getElementById('hrTableBody').getElementsByTagName('tr');
+            
+            Array.from(rows).forEach(row => {
+                const companyEmail = row.cells[1].textContent.toLowerCase();
+                if (companyEmail.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Edit Admin function
+        async function editAdmin() {
+            try {
+                const response = await fetch('/dashboard/admin-details/');
+                const admin = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('editAdminUsername').value = admin.username;
+                    document.getElementById('editAdminEmail').value = admin.email;
+                    document.getElementById('editAdminMobile').value = admin.mobile_number;
+                    document.getElementById('editAdminPassword').value = '';
+                    document.getElementById('editAdminConfirmPassword').value = '';
+                    
+                    const editAdminModal = new bootstrap.Modal(document.getElementById('editAdminModal'));
+                    editAdminModal.show();
+                } else {
+                    alert('Failed to fetch admin details');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong while fetching admin details');
+            }
+        }
+
+        // Update Admin function
+        async function updateAdmin() {
+            const adminData = {
+                username: document.getElementById('editAdminUsername').value,
+                email: document.getElementById('editAdminEmail').value,
+                mobile_number: document.getElementById('editAdminMobile').value
+            };
+
+            const newPassword = document.getElementById('editAdminPassword').value;
+            const confirmPassword = document.getElementById('editAdminConfirmPassword').value;
+
+            if (newPassword) {
+                if (newPassword !== confirmPassword) {
+                    alert('Passwords do not match');
+                    return;
+                }
+                if (newPassword.length < 8) {
+                    alert('Password must be at least 8 characters long');
+                    return;
+                }
+                adminData.password = newPassword;
+            }
+
+            try {
+                const response = await fetch('/dashboard/admin-details/update/', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(adminData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Profile updated successfully');
+                    const editAdminModal = bootstrap.Modal.getInstance(document.getElementById('editAdminModal'));
+                    editAdminModal.hide();
+                    loadAdminDetails(); // Reload admin details
+                } else {
+                    alert(data.error || 'Failed to update profile');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong while updating profile');
+            }
+        }
+
+        // Update the loadContactMessages function to include better error handling and logging
+        function loadContactMessages() {
+            console.log('Loading contact messages...');
+            fetch('/api/contact/messages/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                credentials: 'include' // Add this to include cookies
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Received messages:', data);
+                if (data.messages) {
+                    updateContactMessagesTable(data.messages);
+                    // Update sidebar badge
+                    const unreadCount = data.messages.filter(msg => !msg.is_read).length;
+                    document.getElementById('sidebarUnreadCount').textContent = unreadCount;
+                } else {
+                    console.warn('No messages found in response');
+                    updateContactMessagesTable([]);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading contact messages:', error);
+                // Show error in the table
+                const tableBody = document.getElementById('contactMessagesTable');
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Error loading messages. Please try again.
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Update the updateContactMessagesTable function to handle empty state
+        function updateContactMessagesTable(messages) {
+            const tableBody = document.getElementById('contactMessagesTable');
+            const unreadCount = messages.filter(msg => !msg.is_read).length;
+            
+            // Update unread count badge
+            document.getElementById('unreadMessagesCount').textContent = unreadCount;
+            document.getElementById('sidebarUnreadCount').textContent = unreadCount;
+
+            if (messages.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2"></i>
+                            <p class="mb-0">No messages found</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let html = '';
+            messages.forEach(msg => {
+                const messagePreview = msg.message.length > 100 ? msg.message.substring(0, 100) + '...' : msg.message;
+                const date = new Date(msg.created_at).toLocaleString();
+                
+                html += `
+                    <tr class="${msg.is_read ? '' : 'table-warning'}" data-message-id="${msg.id}">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle me-2">
+                                    ${msg.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <div class="fw-bold">${msg.name}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="mailto:${msg.email}" class="text-decoration-none">
+                                ${msg.email}
+                            </a>
+                        </td>
+                        <td>
+                            <div class="message-preview" data-bs-toggle="tooltip" title="${msg.message}">
+                                ${messagePreview}
+                            </div>
+                        </td>
+                        <td>${date}</td>
+                        <td>
+                            <span class="badge ${msg.is_read ? 'bg-success' : 'bg-warning'}">
+                                ${msg.is_read ? 'Read' : 'Unread'}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                ${!msg.is_read ? `
+                                    <button class="btn btn-sm btn-primary" onclick="markAsRead(${msg.id})">
+                                        <i class="fas fa-check"></i> Mark as Read
+                                    </button>
+                                ` : ''}
+                                <button class="btn btn-sm btn-info" onclick="viewMessage(${msg.id})">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = html;
+            
+            // Initialize tooltips
+            const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltips.forEach(tooltip => {
+                new bootstrap.Tooltip(tooltip);
+            });
+        }
+
+        // Update the markAsRead function to include better error handling
+        function markAsRead(messageId) {
+            console.log('Marking message as read:', messageId);
+            fetch(`/api/contact/messages/${messageId}/read/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                credentials: 'include' // Add this to include cookies
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Message marked as read:', data);
+                // Reload messages after marking as read
+                loadContactMessages();
+            })
+            .catch(error => {
+                console.error('Error marking message as read:', error);
+                alert('Failed to mark message as read. Please try again.');
+            });
+        }
+
+        // Update the viewMessage function to show the modal
+        function viewMessage(messageId) {
+            const message = document.querySelector(`tr[data-message-id="${messageId}"]`);
+            if (message) {
+                const name = message.querySelector('.fw-bold').textContent;
+                const email = message.querySelector('a[href^="mailto:"]').textContent;
+                const messageText = message.querySelector('.message-preview').getAttribute('title');
+                const date = message.querySelector('td:nth-child(4)').textContent;
+                const isRead = message.classList.contains('table-warning') ? false : true;
+
+                // Update modal content
+                document.getElementById('modalAvatar').textContent = name.charAt(0).toUpperCase();
+                document.getElementById('modalName').textContent = name;
+                document.getElementById('modalEmail').textContent = email;
+                document.getElementById('modalEmail').href = `mailto:${email}`;
+                document.getElementById('modalDate').textContent = date;
+                document.getElementById('modalMessage').textContent = messageText;
+
+                // Show/hide mark as read button
+                const markAsReadBtn = document.getElementById('modalMarkAsRead');
+                if (isRead) {
+                    markAsReadBtn.style.display = 'none';
+                } else {
+                    markAsReadBtn.style.display = 'block';
+                    markAsReadBtn.onclick = () => {
+                        markAsRead(messageId);
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('viewMessageModal'));
+                        modal.hide();
+                    };
+                }
+
+                // Show modal
+                const viewMessageModal = new bootstrap.Modal(document.getElementById('viewMessageModal'));
+                viewMessageModal.show();
+            }
+        }
+
+        // Load contact messages when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadContactMessages();
+            // Refresh messages every 30 seconds
+            setInterval(loadContactMessages, 30000);
+        });
+
+        // Add a function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Edit company function
+        async function editCompany(companyId) {
+            try {
+                const response = await fetch(`/dashboard/companies/${companyId}/`);
+                const company = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('editCompanyId').value = company.id;
+                    document.getElementById('editCompanyName').value = company.company_name;
+                    document.getElementById('editCompanyEmail').value = company.company_email;
+                    document.getElementById('editIndustry').value = company.industry;
+                    document.getElementById('editCompanySize').value = company.company_size;
+                    document.getElementById('editLocation').value = company.location;
+                    
+                    // Show current logo if exists
+                    const logoPreview = document.getElementById('editLogoPreview');
+                    if (company.company_logo) {
+                        logoPreview.src = `/media/${company.company_logo}`;
+                        logoPreview.style.display = 'block';
+                    } else {
+                        logoPreview.style.display = 'none';
+                    }
+                    
+                    const editCompanyModal = new bootstrap.Modal(document.getElementById('editCompanyModal'));
+                    editCompanyModal.show();
+                } else {
+                    alert('Failed to fetch company details');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong while fetching company details');
+            }
+        }
+
+        // Update company function
+        async function updateCompany() {
+            const companyId = document.getElementById('editCompanyId').value;
+            const formData = new FormData();
+            
+            formData.append('company_name', document.getElementById('editCompanyName').value);
+            formData.append('company_email', document.getElementById('editCompanyEmail').value);
+            formData.append('industry', document.getElementById('editIndustry').value);
+            formData.append('company_size', document.getElementById('editCompanySize').value);
+            formData.append('location', document.getElementById('editLocation').value);
+            
+            const logoFile = document.getElementById('editCompanyLogo').files[0];
+            if (logoFile) {
+                formData.append('company_logo', logoFile);
+            }
+
+            try {
+                const response = await fetch(`/dashboard/companies/${companyId}/update/`, {
+                    method: 'PUT',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Company updated successfully');
+                    const editCompanyModal = bootstrap.Modal.getInstance(document.getElementById('editCompanyModal'));
+                    editCompanyModal.hide();
+                    loadCompanies(); // Reload the companies table
+                } else {
+                    alert(data.error || 'Failed to update company');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong while updating company');
+            }
+        }
+
+        // Delete company function
+        async function deleteCompany(companyId) {
+            if (confirm('Are you sure you want to delete this company? This action cannot be undone.')) {
+                try {
+                    const response = await fetch(`/dashboard/companies/${companyId}/delete/`, {
+                        method: 'DELETE'
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert('Company deleted successfully');
+                        loadCompanies(); // Reload the companies table
+                    } else {
+                        alert(data.error || 'Failed to delete company');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Something went wrong while deleting company');
+                }
+            }
+        }
+
+        // Preview company logo in edit modal
+        document.getElementById('editCompanyLogo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('editLogoPreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html> 

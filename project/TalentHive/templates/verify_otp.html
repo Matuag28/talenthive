@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP - Job Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Lato', sans-serif;
+        }
+        .container-form {
+            max-width: 70rem;
+            width: 40%;
+            background: #fff;
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 150px;
+        }
+        .form-control:focus {
+            border-color: #92d35e;
+            box-shadow: 0px 0px 5px rgba(146, 211, 94, 0.5);
+        }
+        .btn-primary {
+            background-color: #92d35e;
+            border: none;
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #4b4b4b;
+        }
+        .otp-input {
+            letter-spacing: 8px;
+            font-size: 24px;
+            text-align: center;
+        }
+        .resend-otp {
+            color: #92d35e;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .resend-otp:hover {
+            color: #4b4b4b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-xl fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index.html' %}">
+                <img class="w-100" src="{% static 'img/Company_logo.png' %}" alt="">
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container d-flex justify-content-center">
+            <div class="container-form">
+                <h2 class="text-center mb-4">Verify Your Email</h2>
+                <p class="text-center mb-4">We've sent a 6-digit OTP to your email address. Please enter it below to verify your account.</p>
+                
+                <form id="verifyOtpForm">
+                    <div class="mb-4">
+                        <label class="form-label">Enter OTP</label>
+                        <input type="text" class="form-control otp-input" id="otp" maxlength="6" required 
+                               pattern="[0-9]{6}" title="Please enter a 6-digit OTP">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Verify OTP</button>
+                </form>
+                
+                <div class="text-center mt-4">
+                    <p>Didn't receive the OTP? <span class="resend-otp" id="resendOtp">Resend OTP</span></p>
+                    <p id="timer" class="text-muted"></p>
+                </div>
+                <div id="response" class="mt-3 text-center"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Timer for resend OTP
+        let timeLeft = 60;
+        const timerElement = document.getElementById('timer');
+        const resendButton = document.getElementById('resendOtp');
+        
+        // Initially hide the resend button
+        resendButton.style.display = 'none';
+        
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timerElement.textContent = `Resend OTP in ${timeLeft} seconds`;
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                timerElement.textContent = '';
+                resendButton.style.display = 'inline';
+            }
+        }
+        
+        updateTimer();
+        
+        // Handle OTP verification
+        const form = document.getElementById('verifyOtpForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const otp = document.getElementById('otp').value;
+            
+            try {
+                const response = await fetch('/verify_otp/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ otp })
+                });
+                
+                const data = await response.json();
+                const responseElement = document.getElementById('response');
+                
+                if (response.ok) {
+                    responseElement.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                    // Redirect to dashboard after successful verification
+                    setTimeout(() => {
+                        window.location.href = '/cdashboard.html';
+                    }, 2000);
+                } else {
+                    responseElement.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('response').innerHTML = 
+                    '<div class="alert alert-danger">An error occurred. Please try again.</div>';
+            }
+        });
+        
+        // Handle resend OTP
+        resendButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/send_otp/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                });
+                
+                const data = await response.json();
+                const responseElement = document.getElementById('response');
+                
+                if (response.ok) {
+                    responseElement.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                    // Reset timer and hide resend button
+                    timeLeft = 60;
+                    resendButton.style.display = 'none';
+                    updateTimer();
+                } else {
+                    responseElement.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('response').innerHTML = 
+                    '<div class="alert alert-danger">An error occurred. Please try again.</div>';
+            }
+        });
+        
+        // Helper function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html> 

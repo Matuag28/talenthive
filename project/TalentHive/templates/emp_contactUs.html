@@ -1,0 +1,760 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | TalentHub</title>
+    
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #4e73df;
+            --primary-dark: #3755c1;
+            --primary-light: #6e95ff;
+            --secondary-color: #1cc88a;
+            --dark-color: #2e384d;
+            --light-color: #f8f9fc;
+            --gray-color: #858796;
+            --success-color: #1cc88a;
+            --error-color: #e74a3b;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f9fc;
+            color: var(--dark-color);
+        }
+        
+        /* Navigation Bar Styles */
+        .navbar {
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-bg {
+            background-image: url("../static/img/hader-bg.png");
+            background-color: #f1f7eb;
+            background-repeat: no-repeat;
+            background-position: center 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .navbar-brand span {
+            color: var(--secondary-color);
+        }
+        
+        .navbar-scrolled {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .navbar .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .navbar .nav-link:hover::after {
+            width: 80%;
+        }
+        
+        .navbar .btn-post-job {
+            background-color: #92d35e;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(78, 115, 223, 0.25);
+        }
+        
+        .navbar .btn-post-job:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(78, 115, 223, 0.4);
+        }
+        
+        /* Hero Section Styles */
+        .hero-section {
+            position: relative;
+            /* background: linear-gradient(135deg, rgba(46, 56, 77, 0.9), rgba(78, 115, 223, 0.85)), 
+                        url('/api/placeholder/1200/400') center/cover no-repeat; */
+            background-color: white;
+            color: #4b4b4b;
+            padding: 5rem 0;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-content {
+            animation: fadeInUp 1s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-subtitle {
+            font-weight: 300;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Form Styles */
+        .contact-card {
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border: none;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .form-control, .form-select {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #e0e5ec;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(#92d35e);
+            box-shadow: 0 0 0 0.1rem #92d35e;
+        }
+        
+        .form-floating label {
+            padding: 0.75rem 1rem;
+        }
+        
+        .form-floating > .form-control,
+        .form-floating > .form-select {
+            height: calc(3.5rem + 2px);
+            line-height: 1.25;
+        }
+        
+        .btn-submit {
+            /* background: linear-gradient(45deg, var(--primary-color), var(--primary-light)); */
+            background-color: #92d35e;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(78, 115, 223, 0.25);
+        }
+        
+        .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(78, 115, 223, 0.4);
+        }
+        
+        /* Contact Info Cards */
+        .contact-info-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+        
+        .contact-info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        /* Map Section */
+        .map-section {
+            height: 300px;
+            background-color: #e9e9e9;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        /* Form validation styling */
+        .was-validated .form-control:invalid, 
+        .form-control.is-invalid {
+            border-color: var(--error-color);
+            padding-right: calc(1.5em + 0.75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23e74a3b'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23e74a3b' stroke='none'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+        
+        .was-validated .form-control:valid, 
+        .form-control.is-valid {
+            border-color: var(--success-color);
+            padding-right: calc(1.5em + 0.75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%231cc88a' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+        
+        /* Error shake animation */
+        @keyframes shake {
+            0%, 100% {transform: translateX(0);}
+            10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
+            20%, 40%, 60%, 80% {transform: translateX(5px);}
+        }
+        
+        .shake {
+            animation: shake 0.6s ease-in-out;
+        }
+        
+        /* Optional Glassmorphism effect */
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0 2rem 0;
+        }
+        
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-link:hover {
+            color: white;
+        }
+        
+        .social-icons .bi {
+            font-size: 1.25rem;
+            margin-right: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons .bi:hover {
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .navbar .btn-post-job {
+                margin-top: 0.5rem;
+            }
+            
+            .hero-section {
+                padding: 3rem 0;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <!-- Brand/Logo -->
+            <a class="navbar-brand" href="#"><img src="../static/img/Employer_logo.png" alt="" width="170px" height="40px"></a>
+            
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation Items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="emp_aboutUs.html">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="emp_contactUs.html">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="emp_signin.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="emp_signup.html">sign up</a>
+                    </li>
+                </ul>
+                
+                <!-- Post a Job Button -->
+                <a href="emp_signin.html" class="btn btn-post-job text-white">Post a Job</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center hero-content">
+                    <h1 class="hero-title">Get in Touch with <span style="color: #92d35e;">TalentHive!</span></h1>
+                    <p class="hero-subtitle">Have questions? We're here to help. Let us know how we can assist you in finding the perfect talent for your organization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information Cards -->
+    <!-- <section class="contact-info py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                    <div class="contact-info-card">
+                        <div class="contact-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <h4>Our Location</h4>
+                        <p class="mb-0">123 Innovation Drive<br>Tech Valley, CA 94103</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                    <div class="contact-info-card">
+                        <div class="contact-icon">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                        <h4>Email Us</h4>
+                        <p class="mb-0">support@talenthive.com<br>employers@talenthive.com</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="contact-info-card">
+                        <div class="contact-icon">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+                        <h4>Call Us</h4>
+                        <p class="mb-0">+1 (800) 123-4567<br>Mon-Fri: 9am-6pm PST</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Map Section -->
+    <!-- <section class="container mb-5">
+        <div class="map-section"> -->
+            <!-- Placeholder for map -->
+            <!-- <img src="/api/placeholder/1200/300" alt="Map location" class="w-100 h-100 object-fit-cover">
+        </div>
+    </section> -->
+
+    <!-- Contact Form Section -->
+    <section class="form-section py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="mb-3">Send Us a Message</h2>
+                    <p class="text-muted">We typically respond within 24 hours. For urgent inquiries, please call our support line.</p>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card contact-card glassmorphism">
+                        <div class="card-body">
+                            <!-- Form starts here -->
+                            <form class="needs-validation" novalidate>
+                                <div class="row">
+                                    <!-- Full Name -->
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="fullName" placeholder="John Doe" required>
+                                            <label for="fullName">Full Name</label>
+                                            <div class="invalid-feedback">
+                                                Please provide your name.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Company Name -->
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="companyName" placeholder="Your Company">
+                                            <label for="companyName">Company Name (Optional)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <!-- Email -->
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-floating">
+                                            <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                                            <label for="email">Email Address</label>
+                                            <div class="invalid-feedback">
+                                                Please provide a valid email address.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Phone -->
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-floating">
+                                            <input type="tel" class="form-control" id="phone" placeholder="(123) 456-7890">
+                                            <label for="phone">Phone Number (Optional)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Subject -->
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="subject" required>
+                                        <option value="" selected disabled>Select one...</option>
+                                        <option value="general">General Inquiry</option>
+                                        <option value="support">Technical Support</option>
+                                        <option value="billing">Billing Question</option>
+                                        <option value="partnership">Partnership Opportunity</option>
+                                        <option value="feature">Feature Request</option>
+                                    </select>
+                                    <label for="subject">Subject</label>
+                                    <div class="invalid-feedback">
+                                        Please select a subject.
+                                    </div>
+                                </div>
+                                
+                                <!-- Message -->
+                                <div class="form-floating mb-4">
+                                    <textarea class="form-control" id="message" style="height: 150px" placeholder="Your message here" required></textarea>
+                                    <label for="message">Your Message</label>
+                                    <div class="invalid-feedback">
+                                        Please provide your message.
+                                    </div>
+                                </div>
+                                
+                                <!-- Privacy Policy Consent -->
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="privacyConsent" required>
+                                    <label class="form-check-label" for="privacyConsent">
+                                        I agree to the <a href="#" class="text-decoration-none">Privacy Policy</a> and consent to being contacted regarding my inquiry.
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        You must agree before submitting.
+                                    </div>
+                                </div>
+                                
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-submit text-white w-100 py-2">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <!-- <section class="faq-section py-5">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="mb-3">Frequently Asked Questions</h2>
+                    <p class="text-muted">Find quick answers to common questions about our employer services.</p>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="faqAccordion"> -->
+                        <!-- FAQ Item 1 -->
+                        <!-- <div class="accordion-item mb-3 border rounded">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    How quickly can I find candidates on TalentHive?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Many employers start receiving applications within the first 24 hours of posting a job. Our AI-powered matching algorithm also proactively suggests relevant candidates from our talent pool based on your job requirements.
+                                </div>
+                            </div>
+                        </div> -->
+                        
+                        <!-- FAQ Item 2 -->
+                        <!-- <div class="accordion-item mb-3 border rounded">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    What pricing plans do you offer for employers?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    We offer flexible pricing plans to meet different hiring needs, including pay-per-post, monthly subscriptions, and enterprise solutions. Check our pricing page for current rates or contact our sales team for custom enterprise packages.
+                                </div>
+                            </div>
+                        </div> -->
+                        
+                        <!-- FAQ Item 3 -->
+                        <!-- <div class="accordion-item mb-3 border rounded">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    How can I maximize the visibility of my job posting?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    To increase the visibility of your job posting, use clear job titles, provide detailed descriptions, highlight key benefits, and consider our premium placement options. Our employer guides offer additional tips for optimizing your listings.
+                                </div>
+                            </div>
+                        </div> -->
+                        
+                        <!-- FAQ Item 4 -->
+                        <!-- <div class="accordion-item border rounded">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    Can I integrate TalentHive with my existing ATS?
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes, TalentHive offers API integrations with most popular Applicant Tracking Systems. Our technical team can help set up seamless data flows between platforms to streamline your hiring process.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <!-- Quick Links -->
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Quick Links</h5>
+                    <a href="emp_aboutUs.html" class="footer-link">About Us</a>
+                    <a href="#" class="footer-link">Find Talent</a>
+                    <a href="emp_signin.html" class="footer-link">Post a Job</a>
+                    <a href="#" class="footer-link">Pricing</a>
+                </div>
+
+                <!-- Resources -->
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Resources</h5>
+                    <a href="#" class="footer-link">Employer Guide</a>
+                    <a href="#" class="footer-link">Hiring Tips</a>
+                    <a href="#" class="footer-link">Blog</a>
+                    <a href="emp_contactUs.html" class="footer-link">Help Center</a>
+                </div>
+
+                <!-- Legal -->
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Legal</h5>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Cookies Policy</a>
+                    <a href="#" class="footer-link">Accessibility</a>
+                </div>
+
+                <!-- Newsletter & Social -->
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Stay Connected</h5>
+                    <p class="mb-3">Subscribe to get the latest job market insights</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Your email" aria-label="Your email">
+                        <button class="btn btn-primary" type="button">Subscribe</button>
+                    </div>
+                    <div class="social-icons">
+                        <a href="#"><i class="bi bi-linkedin"></i></a>
+                        <a href="#"><i class="bi bi-twitter"></i></a>
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row copyright">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2025 TalentHive. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">Made with <i class="bi bi-heart-fill text-danger"></i> for employers worldwide</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../static/js/nav-bg.js"></script>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Script for Form Validation -->
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+            
+            // Fetch all forms we want to apply validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+            
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                            form.classList.add('shake')
+                            
+                            // Remove the shake class after animation completes
+                            setTimeout(function() {
+                                form.classList.remove('shake')
+                            }, 600)
+                        } else {
+                            // Simulate form submission (in a real scenario, this would send the data to a server)
+                            event.preventDefault()
+                            // Show success message
+                            const formElement = event.target
+                            formElement.classList.remove('was-validated')
+                            formElement.innerHTML = `
+                                <div class="text-center py-4">
+                                    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                                    <h3 class="mt-3">Thank You!</h3>
+                                    <p class="mb-4">Your message has been sent successfully. We'll get back to you shortly.</p>
+                                    <button type="button" class="btn btn-outline-primary" onclick="location.reload()">Send Another Message</button>
+                                </div>
+                            `
+                        }
+                        
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+        
+        // Add navbar shadow on scroll
+        // window.addEventListener('scroll', function() {
+        //     const navbar = document.querySelector('.navbar');
+        //     if (window.scrollY > 10) {
+        //         navbar.classList.add('navbar-scrolled');
+        //     } else {
+        //         navbar.classList.remove('navbar-scrolled');
+        //     }
+        // });
+    </script>
+</body>
+</html>

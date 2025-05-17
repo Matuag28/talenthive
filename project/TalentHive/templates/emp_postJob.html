@@ -1,0 +1,1288 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Job | TalentHive</title>
+    
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #4e73df;
+            --primary-dark: #3755c1;
+            --primary-light: #6e95ff;
+            --secondary-color: #1cc88a;
+            --dark-color: #2e384d;
+            --light-color: #f8f9fc;
+            --gray-color: #858796;
+            --success-color: #1cc88a;
+            --error-color: #e74a3b;
+            --accent-green: #92d35e;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f9fc;
+            color: var(--dark-color);
+        }
+        
+        /* Navigation Bar Styles */
+        .navbar {
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); */
+        }
+
+        .nav-bg {
+            background-image: url("{% static 'img/hader-bg.png' %}");
+            background-color: #f1f7eb;
+            background-repeat: no-repeat;
+            background-position: center 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .navbar-brand span {
+            color: var(--secondary-color);
+        }
+        
+        .navbar-scrolled {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .navbar .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--accent-green);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .navbar .nav-link:hover::after, .navbar .nav-link.active::after {
+            width: 80%;
+        }
+        
+        .navbar .btn-post-job {
+            background-color: var(--accent-green);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(146, 211, 94, 0.25);
+        }
+        
+        .navbar .btn-post-job:hover {
+            background-color: #7fbf45;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(146, 211, 94, 0.4);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--error-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-circle:hover {
+            background-color: var(--primary-color);
+        }
+        
+        /* Page Header */
+        .page-header {
+            position: relative;
+            background: linear-gradient(135deg, #ffffff, #f8f9fc);
+            padding: 7rem 0 3rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .page-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .page-subtitle {
+            color: var(--gray-color);
+            font-weight: 400;
+        }
+        
+        /* Form Card */
+        .form-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            color: var(--dark-color);
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-text {
+            color: var(--gray-color);
+            font-size: 0.85rem;
+        }
+        
+        .form-control {
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 0.2rem rgba(146, 211, 94, 0.25);
+        }
+        
+        .form-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-select:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 0.2rem rgba(146, 211, 94, 0.25);
+        }
+        
+        /* Custom checkbox and radio styles */
+        .form-check-input:checked {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+        
+        .form-check-input:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 0.2rem rgba(146, 211, 94, 0.25);
+        }
+        
+        /* Tags Input */
+        .tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            min-height: 60px;
+        }
+        
+        .tag {
+            background-color: rgba(146, 211, 94, 0.15);
+            color: var(--accent-green);
+            border-radius: 20px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .tag .remove-tag {
+            cursor: pointer;
+            color: var(--accent-green);
+        }
+        
+        .tag-input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            padding: 5px;
+            min-width: 100px;
+        }
+        
+        /* Button Styles */
+        .btn-primary {
+            background-color: var(--accent-green);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(146, 211, 94, 0.25);
+        }
+        
+        .btn-primary:hover {
+            background-color: #7fbf45;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(146, 211, 94, 0.4);
+        }
+        
+        .btn-outline-secondary {
+            border-color: var(--gray-color);
+            color: var(--gray-color);
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: var(--gray-color);
+            color: white;
+        }
+        
+        /* Rich Text Editor */
+        .rich-text-editor {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .editor-toolbar {
+            background-color: #f8f9fc;
+            padding: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .toolbar-btn {
+            background: none;
+            border: none;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .toolbar-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .editor-content {
+            padding: 1rem;
+            min-height: 200px;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0 2rem 0;
+        }
+        
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-green);
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-link:hover {
+            color: white;
+        }
+        
+        .btn{
+            background-color: #92d35e;
+            color: white;
+        }
+
+        .btn:hover{
+            background-color: white;
+            color: black;
+        }
+        
+        /* Preview Card */
+        .preview-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 20px;
+        }
+        
+        .preview-header {
+            background-color: var(--accent-green);
+            padding: 1.5rem;
+            color: white;
+        }
+        
+        .preview-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .preview-company {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .company-logo {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .preview-body {
+            padding: 1.5rem;
+        }
+        
+        .preview-section {
+            margin-bottom: 1.25rem;
+        }
+        
+        .preview-section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gray-color);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        .preview-tag {
+            background-color: rgba(146, 211, 94, 0.15);
+            color: var(--accent-green);
+            border-radius: 20px;
+            padding: 5px 10px;
+            display: inline-block;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        .social-icons .bi {
+            font-size: 1.25rem;
+            margin-right: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons .bi:hover {
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .page-header {
+                padding: 2rem 0 1.5rem;
+            }
+            
+            .preview-card {
+                position: static;
+                margin-bottom: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar .btn-post-job {
+                margin-top: 0.5rem;
+            }
+            
+            .page-title {
+                font-size: 1.75rem;
+            }
+            
+            .form-card {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .avatar-circle {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+            
+            .form-card {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <!-- Brand/Logo -->
+            <a class="navbar-brand" href="#"><img src="{% static 'img/Employer_logo.png' %}" alt="TalentHive Logo" width="170px" height="40px"></a>
+            
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation Items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'emp_dash.html' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'emp_postJob.html' %}">Post a Job</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'emp_jobList.html' %}">My Jobs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'emp_CandidateList.html' %}">Candidates</a>
+                    </li>
+                    
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <!-- Notification Bell -->
+                    <div class="position-relative me-4">
+                        <a href="#" class="text-dark fs-5">
+                            <i class="bi bi-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </div>
+                    
+                    <!-- User Avatar with Dropdown -->
+                    <div class="dropdown">
+                        <div class="avatar-circle" data-bs-toggle="dropdown" aria-expanded="false">
+                            AC
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'companyProfile.html' %}"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="page-title">Create a New Job Posting</h1>
+                    <p class="page-subtitle">Fill in the details below to create an attractive job posting that will help you find the perfect candidates.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <div class="container mb-5">
+        <div class="row">
+            <!-- Form Column -->
+            <!-- <div class="col-lg-8"> -->
+                <form  id="JobForm" >
+                    
+                    
+              
+                    
+                    <!-- Job Details Section -->
+                    <div class="form-card mb-4">
+                        <h3 class="form-section-title">Job Details</h3>
+                        
+                        <div class="mb-3">
+                            <label for="jobTitle" class="form-label">Job Title*</label>
+                            <input type="text" class="form-control" id="title" placeholder="e.g. Senior UI/UX Designer" required>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="jobCategory" class="form-label">Job Category*</label>
+                                <input type="text" class="form-control" id="jobCategory" required>
+                               
+                            </div>
+                            <div class="col-md-6">
+                                <label for="jobType" class="form-label">Job Type*</label>
+                                <input type="text" class="form-control" id="jobType" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="experienceLevel" class="form-label">Experience Level*</label>
+                                <input type="text" class="form-control" id="experienceLevel" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="workplaceType" class="form-label">Workplace Type*</label>
+                                <input type="text" class="form-control" id="workplaceType" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Location & Salary Section -->
+                    <div class="form-card mb-4">
+                        <h3 class="form-section-title">Location & Salary</h3>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="jobLocation" class="form-label">Job Location*</label>
+                                <input type="text" class="form-control" id="jobLocation" placeholder="e.g. Indore, India" required>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" id="remoteWork">
+                                    <label class="form-check-label" for="remoteWork">
+                                        This job can be performed remotely
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="country" class="form-label">Country*</label>
+                                <input type="text" class="form-control" id="country" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Salary*</label>
+                                <input type="text" class="form-control" id="salary" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="hideSalary">
+                            <label class="form-check-label" for="hideSalary">
+                                Hide salary information from job post
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Job Description Section -->
+                    <div class="form-card mb-4">
+                        <h3 class="form-section-title">Job Description</h3>
+
+                        <div class="mb-4">
+                            <label for="companyOverview" class="form-label">Company Overview*</label>
+                            <div class="rich-text-editor">
+                                <div class="editor-toolbar">
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-bold"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-italic"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-underline"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-list-ul"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-list-ol"></i></button>
+                                </div>
+                                <div class="editor-content" contenteditable="true" id="companyOverview">
+                                    Acme Corporation is a leading technology company specializing in innovative solutions for businesses. We're passionate about creating cutting-edge products that transform how people work.
+                                </div>
+                            </div>
+                            <div class="form-text">Provide a brief overview of your company and what makes it a great place to work.</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="jobDescription" class="form-label">Job Description*</label>
+                            <div class="rich-text-editor">
+                                <div class="editor-toolbar">
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-bold"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-italic"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-underline"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-list-ul"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-list-ol"></i></button>
+                                </div>
+                                <div class="editor-content" contenteditable="true" id="jobDescription">
+                                    We are seeking a talented professional to join our team. In this role, you will be responsible for...
+                                </div>
+                            </div>
+                            <div class="form-text">Describe the position, including day-to-day responsibilities, projects, and team dynamics.</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="requirements" class="form-label">Requirements*</label>
+                            <div class="rich-text-editor">
+                                <div class="editor-toolbar">
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-bold"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-italic"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-underline"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-list-ul"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-list-ol"></i></button>
+                                </div>
+                                <div class="editor-content" contenteditable="true" id="requirements">
+                                    • Bachelor's degree in related field
+                                    • 3+ years of experience in a similar role
+                                    • Proficient in industry standard tools and technologies
+                                    • Strong communication and teamwork skills
+                                    • Ability to work independently and manage multiple priorities
+                                </div>
+                            </div>
+                            <div class="form-text">List the qualifications, skills, and experience required for this position.</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="benefits" class="form-label">Benefits & Perks</label>
+                            <div class="rich-text-editor">
+                                <div class="editor-toolbar">
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-bold"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-italic"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-type-underline"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-list-ul"></i></button>
+                                    <button type="button" class="toolbar-btn"><i class="bi bi-list-ol"></i></button>
+                                </div>
+                                <div class="editor-content" contenteditable="true" id="benefits">
+                                    • Competitive salary and performance bonuses
+                                    • Comprehensive health, dental, and vision insurance
+                                    • 401(k) retirement plan with employer match
+                                    • Flexible work schedule and remote work options
+                                    • Professional development opportunities
+                                    • Paid time off and company holidays
+                                </div>
+                            </div>
+                            <div class="form-text">Highlight the benefits and perks offered with this position to attract candidates.</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Skills & Qualifications Section -->
+                    <div class="form-card mb-4">
+                        <h3 class="form-section-title">Skills & Qualifications</h3>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Required Skills*</label>
+                            <div class="tags-input" id="requiredSkills">
+                                <div class="tag">
+                                    Communication <span class="remove-tag"><i class="bi bi-x"></i></span>
+                                </div>
+                                <div class="tag">
+                                    Project Management <span class="remove-tag"><i class="bi bi-x"></i></span>
+                                </div>
+                                <div class="tag">
+                                    Leadership <span class="remove-tag"><i class="bi bi-x"></i></span>
+                                </div>
+                                <input type="text" class="tag-input" placeholder="Add skills...">
+                            </div>
+                            <div class="form-text">Add skills that are required for this position (press Enter after each skill).</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Preferred Skills</label>
+                            <div class="tags-input" id="preferredSkills">
+                                <div class="tag">
+                                    Data Analysis <span class="remove-tag"><i class="bi bi-x"></i></span>
+                                </div>
+                                <div class="tag">
+                                    Public Speaking <span class="remove-tag"><i class="bi bi-x"></i></span>
+                                </div>
+                                <input type="text" class="tag-input" placeholder="Add skills...">
+                            </div>
+                            <div class="form-text">Add skills that are preferred but not required for this position.</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="educationLevel" class="form-label">Education Level*</label>
+                            <select class="form-select" id="educationLevel" required>
+                                <option value="" selected disabled>Select education level</option>
+                                <option value="high-school">High School Diploma/GED</option>
+                                <option value="associate">Associate's Degree</option>
+                                <option value="bachelor">Bachelor's Degree</option>
+                                <option value="master">Master's Degree</option>
+                                <option value="doctorate">Doctorate/PhD</option>
+                                <option value="professional">Professional Degree (MD, JD, etc.)</option>
+                                <option value="certification">Professional Certification</option>
+                                <option value="none">No Specific Requirement</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Languages</label>
+                            <div class="tags-input" id="languages">
+                                <div class="tag">
+                                    English <span class="remove-tag"><i class="bi bi-x"></i></span>
+                                </div>
+                                <input type="text" class="tag-input" placeholder="Add languages...">
+                            </div>
+                            <div class="form-text">Add languages required or preferred for this position.</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Application Settings Section -->
+                    <div class="form-card mb-4">
+                        <h3 class="form-section-title">Application Settings</h3>
+                        
+                        <div class="mb-3">
+                            <label for="applicationDeadline" class="form-label">Application Deadline</label>
+                            <input type="date" class="form-control" id="applicationDeadline">
+                            <div class="form-text">Leave blank if there's no specific deadline.</div>
+                        </div>
+                        
+                        <!-- <div class="mb-3">
+                            <label for="receivingApplications" class="form-label">Receiving Applications*</label>
+                            <select class="form-select" id="receivingApplications" required>
+                                <option value="on-platform" selected>Receive applications on TalentHive</option>
+                                <option value="external-link">Direct applicants to external application page</option>
+                                <option value="email">Receive applications via email</option>
+                            </select>
+                        </div> -->
+                        
+                        <!-- <div class="mb-4">
+                            <label for="externalUrl" class="form-label">External Application URL</label>
+                            <input type="url" class="form-control" id="externalUrl" placeholder="https://your-career-site.com/job">
+                            <div class="form-text">Only required if you selected "Direct applicants to external application page" above.</div>
+                        </div> -->
+                        
+                        <!-- <div class="mb-4">
+                            <label class="form-label">Application Questions</label>
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Question 1</label>
+                                        <input type="text" class="form-control" placeholder="e.g. How many years of experience do you have with...">
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="required1" checked>
+                                            <label class="form-check-label" for="required1">Required</label>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-danger">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-plus-circle me-1"></i> Add Question
+                            </button>
+                        </div> -->
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Required Documents</label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="requireResume" checked>
+                                <label class="form-check-label" for="requireResume">Resume/CV</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="requireCoverLetter">
+                                <label class="form-check-label" for="requireCoverLetter">Cover Letter</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="requirePortfolio">
+                                <label class="form-check-label" for="requirePortfolio">Portfolio</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="requireReferences">
+                                <label class="form-check-label" for="requireReferences">References</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Visibility Settings Section -->
+                    <div class="form-card mb-4">
+                        <h3 class="form-section-title">Visibility Settings</h3>
+                        
+                        <div class="mb-3">
+                            <label for="visibility" class="form-label">Job Visibility*</label>
+                            <select class="form-select" id="visibility" required>
+                                <option value="public" selected>Public - Visible to everyone</option>
+                                <option value="private">Private - Only visible with direct link</option>
+                                <option value="company">Company - Only visible to your company employees</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="promotionOptions" class="form-label">Promotion Options</label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="featuredJob">
+                                <label class="form-check-label" for="featuredJob">
+                                    Feature this job (additional fee applies)
+                                </label>
+                                <div class="form-text">Featured jobs appear at the top of search results and get 5x more visibility.</div>
+                            </div>
+                            
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="urgentJob">
+                                <label class="form-check-label" for="urgentJob">
+                                    Mark as urgent (additional fee applies)
+                                </label>
+                                <div class="form-text">Urgent jobs are highlighted with an "Urgent" tag to attract immediate applications.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="publishOption" class="form-label">Publishing Option*</label>
+                            <select class="form-select" id="publishOption" required>
+                                <option value="publish-now" selected>Publish immediately</option>
+                                <option value="save-draft">Save as draft</option>
+                                <option value="schedule">Schedule publishing</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="scheduleDate" class="form-label">Schedule Date</label>
+                            <input type="datetime-local" class="form-control" id="scheduleDate">
+                            <div class="form-text">Only required if you selected "Schedule publishing" above.</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-outline-secondary">Save as Draft</button>
+                        <!-- Inside your form, before the submit buttons -->
+                    <div id="response" class="mt-3"></div>
+                        <button type="submit" class="btn btn-primary">Post Job</button>
+                    </div>
+                    
+                </form>
+            <!-- </div> -->
+      
+            
+            <!-- Preview Column -->
+            <!-- <div class="col-lg-4">
+                <div class="preview-card">
+                    <div class="preview-header">
+                        <h4 class="preview-title">Senior UI/UX Designer</h4>
+                        <div class="preview-company">
+                            <div class="company-logo">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold">Acme Corporation</div>
+                                <div class="small">San Francisco, CA</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="preview-body">
+                        <div class="preview-section">
+                            <div class="preview-section-title">Job Details</div>
+                            <div><i class="bi bi-briefcase me-2"></i> Full-time</div>
+                            <div><i class="bi bi-geo-alt me-2"></i> On-site</div>
+                            <div><i class="bi bi-graph-up me-2"></i> Senior Level (5-8 years)</div>
+                            <div><i class="bi bi-cash-stack me-2"></i> $100,000 - $130,000 yearly</div>
+                        </div>
+                        
+                        <div class="preview-section">
+                            <div class="preview-section-title">Required Skills</div>
+                            <div>
+                                <span class="preview-tag">Communication</span>
+                                <span class="preview-tag">Project Management</span>
+                                <span class="preview-tag">Leadership</span>
+                            </div>
+                        </div>
+                        
+                        <div class="preview-section">
+                            <div class="preview-section-title">Overview</div>
+                            <p class="small">Acme Corporation is a leading technology company specializing in innovative solutions for businesses. We're passionate about creating cutting-edge products that transform how people work.</p>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <div class="small text-muted mb-2">This is a preview of how your job will appear to candidates</div>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">View Full Preview</a>
+                        </div>
+                    </div> -->
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+    
+   <!-- Footer -->
+ <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <!-- Company Info -->
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <img src="{% static 'img/Employer_logo.png' %}" alt="TalentHive Logo" width="170px" height="40px" class="mb-3">
+                <p class="mb-4">Connecting top talent with leading employers. TalentHive helps businesses find the perfect candidates for their open positions.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-twitter"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                <h5>For Employers</h5>
+                <a href="{% url 'emp_postJob.html' %}" class="footer-link">Post a Job</a>
+                <a href="#" class="footer-link">Browse Candidates</a>
+                <!-- <a href="#" class="footer-link">Pricing Plans</a>
+                <a href="#" class="footer-link">Employer Resources</a> -->
+            </div>
+            
+            <!-- Additional Links
+            <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                <h5>For Job Seekers</h5>
+                <a href="#" class="footer-link">Search Jobs</a>
+                <a href="#" class="footer-link">Create Resume</a>
+                <a href="#" class="footer-link">Career Advice</a>
+                <a href="#" class="footer-link">Job Alerts</a>
+            </div> -->
+            
+            <!-- Company Links -->
+            <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                <h5>Company</h5>
+                <a href="#" class="footer-link">About Us</a>
+                <a href="#" class="footer-link">Contact Us</a>
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="col-lg-2 col-md-4">
+                <h5>Contact Us</h5>
+                <!-- <a href="#" class="footer-link"><i class="bi bi-geo-alt me-2"></i>123 Market St, Suite 456, San Francisco, CA 94103</a> -->
+                <a href="#" class="footer-link"><i class="bi bi-envelope me-2"></i>support@talenthive.com</a>
+                <a href="#" class="footer-link"><i class="bi bi-telephone me-2"></i>8659034431</a>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="row">
+            <div class="col-12 text-center copyright">
+                <p class="mb-0">© 2025 TalentHive. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script src="../static/js/nav-bg.js"></script>
+    
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Add scroll event to navbar for shadow effect
+        // window.addEventListener('scroll', function() {
+        //     const navbar = document.querySelector('.navbar');
+        //     if (window.scrollY > 10) {
+        //         navbar.classList.add('navbar-scrolled');
+        //     } else {
+        //         navbar.classList.remove('navbar-scrolled');
+        //     }
+        // });
+        
+        // Initialize tags functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tags input functionality
+            const tagsInputs = document.querySelectorAll('.tags-input');
+            
+            tagsInputs.forEach(tagsInput => {
+                const tagInput = tagsInput.querySelector('.tag-input');
+                
+                tagInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && this.value.trim() !== '') {
+                        e.preventDefault();
+                        
+                        // Create new tag
+                        const tag = document.createElement('div');
+                        tag.className = 'tag';
+                        tag.innerHTML = `
+                            ${this.value.trim()} <span class="remove-tag"><i class="bi bi-x"></i></span>
+                        `;
+                        
+                        // Add remove event to new tag
+                        const removeBtn = tag.querySelector('.remove-tag');
+                        removeBtn.addEventListener('click', function() {
+                            tag.remove();
+                        });
+                        
+                        // Insert tag before input
+                        tagsInput.insertBefore(tag, this);
+                        
+                        // Clear input
+                        this.value = '';
+                    }
+                });
+                
+                // Add remove event to existing tags
+                const removeBtns = tagsInput.querySelectorAll('.remove-tag');
+                removeBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        this.parentElement.remove();
+                    });
+                });
+            });
+            
+            // Preview update functionality - Basic implementation
+            const jobTitleInput = document.getElementById('jobTitle');
+            const previewTitle = document.querySelector('.preview-title');
+            
+            jobTitleInput.addEventListener('input', function() {
+                previewTitle.textContent = this.value || 'Senior UI/UX Designer';
+            });
+            
+            const jobLocationInput = document.getElementById('jobLocation');
+            const previewLocation = document.querySelector('.preview-company .small');
+            
+            jobLocationInput.addEventListener('input', function() {
+                previewLocation.textContent = this.value || 'San Francisco, CA';
+            });
+            
+            // Rich text editor basic functionality
+            const toolbarBtns = document.querySelectorAll('.toolbar-btn');
+            
+            toolbarBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const command = this.querySelector('i').classList.contains('bi-type-bold') ? 'bold' :
+                                  this.querySelector('i').classList.contains('bi-type-italic') ? 'italic' :
+                                  this.querySelector('i').classList.contains('bi-type-underline') ? 'underline' :
+                                  this.querySelector('i').classList.contains('bi-list-ul') ? 'insertUnorderedList' :
+                                  this.querySelector('i').classList.contains('bi-list-ol') ? 'insertOrderedList' : '';
+                    
+                    if (command) {
+                        document.execCommand(command, false, null);
+                    }
+                });
+            });
+        });
+
+        // Logout functionality
+        async function logout() {
+            try {
+                const response = await fetch('/logout/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Clear any stored data
+                    localStorage.clear();
+                    // Redirect to login page
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert(data.error || 'Logout failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during logout');
+            }
+        }
+    </script>
+
+    <script>
+    document.getElementById('JobForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        // Helper function to safely get values
+        function getValue(id) {
+            const element = document.getElementById(id);
+            return element ? element.value : null;
+        }
+    
+        function getChecked(id) {
+            const element = document.getElementById(id);
+            return element ? element.checked : false;
+        }
+    
+        function getHTML(id) {
+            const element = document.getElementById(id);
+            return element ? element.innerHTML : '';
+        }
+    
+        // Collect all form data with proper field names
+        const formData = {
+            title: getValue('title'),
+            category: getValue('jobCategory'),
+            job_type: getValue('jobType'),
+            experience_level: getValue('experienceLevel'),
+            workplace_type: getValue('workplaceType') + 
+                           (getChecked('remoteWork') ? ' (Remote)' : ''),
+            location: getValue('jobLocation'),
+            country: getValue('country'),
+            salary: getValue('salary'),
+            hide_salary: getChecked('hideSalary'),
+            company_overview: getHTML('companyOverview'),
+            job_description: getHTML('jobDescription'),
+            requirements: getHTML('requirements'),
+            benefits: getHTML('benefits'),
+            education_level: getValue('educationLevel'),
+            application_deadline: getValue('applicationDeadline') || null,
+            require_resume: getChecked('requireResume'),
+            require_cover_letter: getChecked('requireCoverLetter'),
+            require_portfolio: getChecked('requirePortfolio'),
+            require_references: getChecked('requireReferences'),
+            visibility: getValue('visibility'),
+            featured_job: getChecked('featuredJob'),
+            urgent_job: getChecked('urgentJob'),
+            publish_option: getValue('publishOption'),
+            schedule_date: getValue('scheduleDate') || null,
+            // Convert arrays to comma-separated strings
+            required_skills: Array.from(document.querySelectorAll('#requiredSkills .tag'))
+                .map(tag => tag.textContent.trim().replace('×', '').trim()).join(','),
+            preferred_skills: Array.from(document.querySelectorAll('#preferredSkills .tag'))
+                .map(tag => tag.textContent.trim().replace('×', '').trim()).join(','),
+            languages: Array.from(document.querySelectorAll('#languages .tag'))
+                .map(tag => tag.textContent.trim().replace('×', '').trim()).join(',')
+        };
+    
+        // Basic validation
+        if (!formData.title) {
+            showAlert('danger', 'Job title is required');
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://127.0.0.1:8000/job/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken') || ''
+                },
+                body: JSON.stringify(formData)
+            });
+    
+            const result = await response.json();
+            
+            if (response.ok) {
+                showAlert('success', result.message || 'Job posted successfully!');
+                // Optionally reset form
+                // document.getElementById('JobForm').reset();
+            } else {
+                showAlert('danger', result.error || 'Failed to create job posting');
+                // Log validation errors if available
+                if (result.errors) {
+                    console.error("Validation errors:", result.errors);
+                }
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            showAlert('danger', 'Network error. Please try again.');
+        }
+    });
+    
+    // Helper function to show alerts
+    function showAlert(type, message) {
+        const responseDiv = document.getElementById('response');
+        if (!responseDiv) {
+            console.error('Response div not found!');
+            return;
+        }
+    
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.textContent = message;
+        
+        responseDiv.innerHTML = '';
+        responseDiv.appendChild(alertDiv);
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => alertDiv.remove(), 5000);
+    }
+    
+    // CSRF token helper (if needed)
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    </script>
+     
+
+
+
+
+
+
+
+
+</body>
+</html>

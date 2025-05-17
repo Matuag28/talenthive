@@ -1,0 +1,943 @@
+{% load static  %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Profile | TalentHive</title>
+    
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #4e73df;
+            --primary-dark: #3755c1;
+            --primary-light: #6e95ff;
+            --secondary-color: #1cc88a;
+            --dark-color: #2e384d;
+            --light-color: #f8f9fc;
+            --gray-color: #858796;
+            --success-color: #1cc88a;
+            --error-color: #e74a3b;
+            --accent-green: #92d35e;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f9fc;
+            color: var(--dark-color);
+        }
+        
+        /* Navigation Bar Styles */
+        .navbar {
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-bg {
+            background-image: url("{% static 'img/hader-bg.png' %}");
+            background-color: #f1f7eb;
+            background-repeat: no-repeat;
+            background-position: center 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .navbar-brand span {
+            color: var(--secondary-color);
+        }
+        
+        .navbar-scrolled {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .navbar .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--accent-green);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .navbar .nav-link:hover::after, .navbar .nav-link.active::after {
+            width: 80%;
+        }
+        
+        .navbar .btn-post-job {
+            background-color: var(--accent-green);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(146, 211, 94, 0.25);
+        }
+        
+        .navbar .btn-post-job:hover {
+            background-color: #7fbf45;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(146, 211, 94, 0.4);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--error-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-circle:hover {
+            background-color: var(--primary-color);
+        }
+        
+        /* Dashboard Header */
+        .dashboard-header {
+            position: relative;
+            background: linear-gradient(135deg, #ffffff, #f8f9fc);
+            padding: 7rem 0 3rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .dashboard-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .dashboard-subtitle {
+            color: var(--gray-color);
+            font-weight: 400;
+        }
+        
+        /* Profile Styles */
+        
+        .profile-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent-green);
+        }
+        
+        .logo-upload-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            border: 2px dashed #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .logo-upload-container:hover {
+            border-color: var(--accent-green);
+        }
+        
+        .logo-upload-icon {
+            font-size: 2rem;
+            color: var(--gray-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .logo-upload-text {
+            font-size: 0.8rem;
+            color: var(--gray-color);
+            text-align: center;
+        }
+        
+        .logo-preview {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            top: 0;
+            left: 0;
+            background-color: #f0f0f0;
+            padding: 5px;
+        }
+        
+        .preview-wrapper {
+            position: relative;
+        }
+        
+        .remove-logo {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--error-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 0.25rem rgba(146, 211, 94, 0.25);
+        }
+        
+        .input-group-text {
+            background-color: #f8f9fc;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px 0 0 8px;
+        }
+        
+        .social-input {
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .action-btn {
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save {
+            background-color: var(--accent-green);
+            border: none;
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background-color: #7fbf45;
+            box-shadow: 0 4px 10px rgba(146, 211, 94, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-cancel {
+            background-color: #f8f9fc;
+            border: 1px solid #e0e0e0;
+            color: var(--gray-color);
+        }
+        
+        .btn-cancel:hover {
+            background-color: #eaecf1;
+        }
+        
+        .required-field::after {
+            content: '*';
+            color: var(--error-color);
+            margin-left: 4px;
+        }
+        
+        .location-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .benefits-tag {
+            background-color: #f0f5ff;
+            color: var(--primary-color);
+            border-radius: 20px;
+            padding: 0.3rem 1rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        
+        .benefits-tag i {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        
+        .add-benefit-btn {
+            background-color: #f0f5ff;
+            color: var(--primary-color);
+            border: 1px dashed var(--primary-light);
+            border-radius: 20px;
+            padding: 0.3rem 1rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .add-benefit-btn i {
+            margin-right: 0.3rem;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0 2rem 0;
+        }
+        
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-green);
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-link:hover {
+            color: white;
+        }
+        
+        .btn{
+            background-color: #92d35e;
+            color: white;
+        }
+
+        .btn:hover{
+            background-color: white;
+            color: black;
+        }
+
+        .social-icons .bi {
+            font-size: 1.25rem;
+            margin-right: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons .bi:hover {
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .dashboard-header {
+                padding: 2rem 0 1.5rem;
+            }
+            
+            .location-group {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .location-group .form-group {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar .btn-post-job {
+                margin-top: 0.5rem;
+            }
+            
+            .dashboard-title {
+                font-size: 1.75rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .dashboard-title {
+                font-size: 1.5rem;
+            }
+            
+            .avatar-circle {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+            
+            .profile-card {
+                padding: 1.25rem;
+            }
+            
+            .logo-upload-container {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <!-- Brand/Logo -->
+            <a class="navbar-brand" href="#"><img src="{% static 'img/Employer_logo.png' %}" alt="TalentHive Logo" width="170px" height="40px"></a>
+            
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation Items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'emp_dash.html' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'emp_postJob.html' %}">Post Job</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'emp_jobList.html' %}">My Jobs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Candidates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Messages</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <!-- Notification Bell -->
+                    <div class="position-relative me-4">
+                        <a href="#" class="text-dark fs-5">
+                            <i class="bi bi-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </div>
+                    
+                    <!-- User Avatar with Dropdown -->
+                    <div class="dropdown">
+                        <div class="avatar-circle" data-bs-toggle="dropdown" aria-expanded="false">
+                            AC
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item active" href="{% url 'companyProfile.html' %}"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="dashboard-title">Company <span style="color: #92d35e;">Profile</span></h1>
+                    <p class="dashboard-subtitle">Update your company information to attract the best talent.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <div class="container">
+        <div class="row">
+            <!-- Main Profile Form -->
+            <div class="col-lg-8">
+                <form id="companyProfileForm">
+                    <!-- Basic Information -->
+                    <div class="profile-card mb-4">
+                        <h3 class="section-title">Basic Information</h3>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="companyName" class="form-label required-field">Company Name</label>
+                                <input type="text" class="form-control" id="companyName" value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="industryType" class="form-label required-field">Industry</label>
+                                <input type="text" class="form-control" id="industryType" value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="companySize" class="form-label">Company Size</label>
+                                <input type="text" class="form-control" id="companySize" value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="foundedYear" class="form-label">Founded Year</label>
+                                <input type="number" class="form-control" id="foundedYear" min="1800" max="" value="">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="companyWebsite" class="form-label">Company Website</label>
+                                <input type="url" class="form-control" id="companyWebsite" value="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Company Logo -->
+                    <div class="profile-card mb-4">
+                        <h3 class="section-title">Company Logo</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="preview-wrapper">
+                                    <input type="file" id="logoUpload" class="d-none" accept="image/*">
+                                    <div class="logo-upload-container mb-2" onclick="document.getElementById('logoUpload').click()">
+                                        <img src="/api/placeholder/120/120" alt="Company Logo" class="logo-preview">
+                                        <div class="remove-logo" onclick="removeLogo(event)">
+                                            <i class="bi bi-x"></i>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted d-block mt-2">Recommended: Square image, minimum 200x200 pixels.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Company -->
+                    <div class="profile-card mb-4">
+                        <h3 class="section-title">About Company</h3>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="companyDescription" class="form-label required-field">Company Description</label>
+                                <textarea class="form-control" id="companyDescription" rows="6" required></textarea>
+                                <small class="text-muted">Write a compelling description of your company to attract potential candidates. (Max 1000 characters)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location Information -->
+                    <div class="profile-card mb-4">
+                        <h3 class="section-title">Location</h3>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="address" class="form-label required-field">Address</label>
+                                <input type="text" class="form-control" id="address" value="" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="city" class="form-label required-field">City</label>
+                                <input type="text" class="form-control" id="city" value="" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="state" class="form-label required-field">State/Province</label>
+                                <input type="text" class="form-control" id="state" value="" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="zipCode" class="form-label required-field">Zip Code</label>
+                                <input type="text" class="form-control" id="zipCode" value="" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="country" class="form-label required-field">Country</label>
+                                <input type="text" class="form-control" id="country" value="" required>
+                                 
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Company Culture & Benefits -->
+                    <div class="profile-card mb-4">
+                        <h3 class="section-title">Company Culture & Benefits</h3>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Work Environment</label>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="workEnvironment" id="onsite" checked>
+                                    <label class="form-check-label" for="onsite">On-site</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="workEnvironment" id="remote">
+                                    <label class="form-check-label" for="remote">Remote</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="workEnvironment" id="hybrid">
+                                    <label class="form-check-label" for="hybrid">Hybrid</label>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Benefits & Perks</label>
+                                <div id="benefitsTags">
+                                    <span class="benefits-tag"><i class="bi bi-x-circle" onclick="removeTag(this)"></i></span>
+                                    <!-- <span class="benefits-tag">401(k) Plan <i class="bi bi-x-circle" onclick="removeTag(this)"></i></span>
+                                    <span class="benefits-tag">Paid Time Off <i class="bi bi-x-circle" onclick="removeTag(this)"></i></span>
+                                    <span class="benefits-tag">Remote Work Option <i class="bi bi-x-circle" onclick="removeTag(this)"></i></span> -->
+                                    <span class="add-benefit-btn" onclick="showAddBenefitModal()"><i class="bi bi-plus"></i> Add</span>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="companyCulture" class="form-label">Company Culture</label>
+                                <textarea class="form-control" id="companyCulture" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Profiles -->
+                    <div class="profile-card mb-4">
+                        <h3 class="section-title">Social Media Profiles</h3>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="linkedinProfile" class="form-label">LinkedIn</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-linkedin"></i></span>
+                                    <input type="text" class="form-control social-input" id="linkedinProfile" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="twitterProfile" class="form-label">Twitter</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-twitter"></i></span>
+                                    <input type="text" class="form-control social-input" id="twitterProfile" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="facebookProfile" class="form-label">Facebook</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-facebook"></i></span>
+                                    <input type="text" class="form-control social-input" id="facebookProfile" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="instagramProfile" class="form-label">Instagram</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-instagram"></i></span>
+                                    <input type="text" class="form-control social-input" id="instagramProfile" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="profile-card mb-4">
+                        <h3 class="section-title">Contact Information</h3>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="contactEmail" class="form-label required-field">Contact Email</label>
+                                <input type="email" class="form-control" id="contactEmail" value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="contactPhone" class="form-label">Contact Phone</label>
+                                <input type="tel" class="form-control" id="contactPhone" value="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Buttons -->
+                    <div class="d-flex justify-content-end mb-5">
+                        <button type="button" class="btn btn-cancel action-btn me-2">Cancel</button>
+                        <button type="submit" class="btn btn-save action-btn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+
+                <!-- Profile Tips Card -->
+                <div class="profile-card mb-4">
+                    <h3 class="section-title">Profile Tips</h3>
+                    <div class="card border-left-info mb-3" style="border-left: 4px solid var(--accent-green);">
+                        <div class="card-body py-2 px-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="bi bi-lightbulb text-warning fs-4"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 small">A complete company profile increases your visibility by up to 70%.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-left-info mb-3" style="border-left: 4px solid var(--accent-green);">
+                        <div class="card-body py-2 px-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="bi bi-image text-primary fs-4"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 small">Adding your company logo helps candidates recognize your brand.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-left-info mb-0" style="border-left: 4px solid var(--accent-green);">
+                        <div class="card-body py-2 px-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="bi bi-graph-up-arrow text-success fs-4"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 small">Companies with detailed culture information attract 50% more qualified applicants.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Visibility Card -->
+                <div class="profile-card mb-4">
+                    <h3 class="section-title">Profile Visibility</h3>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="profileVisibility" checked>
+                        <label class="form-check-label" for="profileVisibility">Public Profile</label>
+                    </div>
+                    <p class="small text-muted">When enabled, your company profile will be visible to job seekers on the TalentHive platform. Disable to hide your profile while making updates.</p>
+                </div>
+
+                <!-- Need Help Card -->
+                <div class="profile-card">
+                    <h3 class="section-title">Need Help?</h3>
+                    <p class="small">Have questions about setting up your company profile?</p>
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-outline-secondary mb-2"><i class="bi bi-question-circle me-2"></i>Visit Help Center</a>
+                        <a href="#" class="btn btn-outline-secondary"><i class="bi bi-headset me-2"></i>Contact Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <!-- Company Info -->
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <img src="{% static 'img/Employer_logo.png' %}" alt="TalentHive Logo" width="170px" height="40px" class="mb-3">
+                <p class="mb-4">Connecting top talent with leading employers. TalentHive helps businesses find the perfect candidates for their open positions.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-twitter"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                <h5>For Employers</h5>
+                <a href="{% url 'emp_postJob.html' %}" class="footer-link">Post a Job</a>
+                <a href="#" class="footer-link">Browse Candidates</a>
+                <!-- <a href="#" class="footer-link">Pricing Plans</a>
+                <a href="#" class="footer-link">Employer Resources</a> -->
+            </div>
+            
+            <!-- Additional Links
+            <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                <h5>For Job Seekers</h5>
+                <a href="#" class="footer-link">Search Jobs</a>
+                <a href="#" class="footer-link">Create Resume</a>
+                <a href="#" class="footer-link">Career Advice</a>
+                <a href="#" class="footer-link">Job Alerts</a>
+            </div> -->
+            
+            <!-- Company Links -->
+            <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                <h5>Company</h5>
+                <a href="#" class="footer-link">About Us</a>
+                <a href="#" class="footer-link">Contact Us</a>
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="col-lg-2 col-md-4">
+                <h5>Contact Us</h5>
+                <!-- <a href="#" class="footer-link"><i class="bi bi-geo-alt me-2"></i>123 Market St, Suite 456, San Francisco, CA 94103</a> -->
+                <a href="#" class="footer-link"><i class="bi bi-envelope me-2"></i>support@talenthive.com</a>
+                <a href="#" class="footer-link"><i class="bi bi-telephone me-2"></i>8659034431</a>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="row">
+            <div class="col-12 text-center copyright">
+                <p class="mb-0">© 2025 TalentHive. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <!-- Add Benefit Modal -->
+    <div class="modal fade" id="addBenefitModal" tabindex="-1" aria-labelledby="addBenefitModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBenefitModalLabel">Add Benefit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="benefitName" class="form-label">Benefit Name</label>
+                        <input type="text" class="form-control" id="benefitName" placeholder="e.g. Flexible Working Hours">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-save" onclick="addBenefit()">Add Benefit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/nav-bg.js' %}"></script>
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Make navbar background change on scroll
+        // window.addEventListener('scroll', function() {
+        //     const navbar = document.querySelector('.navbar');
+        //     if (window.scrollY > 50) {
+        //         navbar.classList.add('navbar-scrolled', 'bg-white');
+        //     } else {
+        //         navbar.classList.remove('navbar-scrolled', 'bg-white');
+        //     }
+        // });
+
+        // Logo upload preview functionality
+        document.getElementById('logoUpload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.querySelector('.logo-preview');
+                    preview.src = e.target.result;
+                    document.querySelector('.remove-logo').style.display = 'flex';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Remove logo functionality
+        function removeLogo(event) {
+            event.stopPropagation();
+            document.querySelector('.logo-preview').src = '/api/placeholder/120/120';
+            document.getElementById('logoUpload').value = '';
+        }
+
+        // Benefits tags functionality
+        function removeTag(element) {
+            element.parentElement.remove();
+        }
+
+        function showAddBenefitModal() {
+            const benefitModal = new bootstrap.Modal(document.getElementById('addBenefitModal'));
+            benefitModal.show();
+        }
+
+        function addBenefit() {
+            const benefitName = document.getElementById('benefitName').value.trim();
+            if (benefitName) {
+                const benefitTag = document.createElement('span');
+                benefitTag.className = 'benefits-tag';
+                benefitTag.innerHTML = `${benefitName} <i class="bi bi-x-circle" onclick="removeTag(this)"></i>`;
+                
+                const addButton = document.querySelector('.add-benefit-btn');
+                document.getElementById('benefitsTags').insertBefore(benefitTag, addButton);
+                
+                // Close modal and reset input
+                bootstrap.Modal.getInstance(document.getElementById('addBenefitModal')).hide();
+                document.getElementById('benefitName').value = '';
+            }
+        }
+
+        // Form submission
+        document.getElementById('companyProfileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Show success message or redirect
+            alert('Company profile updated successfully!');
+        });
+    </script>
+</body>
+</html>

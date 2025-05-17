@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications - TalentHive</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styling */
+        *,
+        *::after,
+        *::before {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: #9d9d9d;
+            background-color: #f8f9fa;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #4b4b4b;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            color: #4b4b4b;
+            font-weight: 700;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #4b4b4b;
+            font-weight: 900;
+        }
+        
+        .green {
+            color: #92d35e;
+        }
+
+        .bg-green {
+            background-color: #92d35e;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1030;
+            padding: 15px 0;
+        }
+
+        .nav-bg {
+            background-image: url("../static/img/hader-bg.png");
+            background-color: #f1f7eb;
+            background-repeat: no-repeat;
+            background-position: center 0;
+        }
+        
+        .navbar .navbar-brand {
+            display: inline-block;
+            width: 170px;
+            margin-right: 30px;
+        }
+        
+        .navbar .navbar-brand img {
+            width: 100%;
+            height: 50px;
+        }
+        
+        .navbar .notification-icon {
+            position: relative;
+            font-size: 1.2rem;
+            color: #4b4b4b;
+            margin-right: 20px;
+        }
+        
+        .navbar .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #92d35e;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25em 0.6em;
+            font-size: 0.75rem;
+        }
+        
+        .navbar .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        /* Search Bar Styling */
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+        }
+        
+        .search-bar .form-control {
+            padding-left: 40px;
+            border-radius: 50px !important;
+            background-color: #f8f9fa;
+        }
+        
+        .search-bar .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9d9d9d;
+        }
+        
+        /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 76px;
+            height: calc(100vh - 76px);
+            width: 250px;
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1020;
+            padding: 20px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link {
+            padding: 12px 15px;
+            color: #4b4b4b;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover {
+            background-color: #f1f7eb;
+            color: #92d35e;
+        }
+        
+        .sidebar .nav-link.active {
+            background-color: #92d35e;
+            color: #ffffff;
+            font-weight: 700;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            padding-top: 96px;
+            transition: all 0.3s ease;
+        }
+
+        .application-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+        .application-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .status-pending { background-color: #fff3cd; color: #856404; }
+        .status-accepted { background-color: #d4edda; color: #155724; }
+        .status-rejected { background-color: #f8d7da; color: #721c24; }
+        .stats-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .successful-application {
+            border-left: 4px solid #28a745;
+            background-color: #f8fff8;
+        }
+        .filter-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .success-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background-color: #f8f9fa;
+        }
+        .job-title {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .company-name {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-right: 20px;
+        }
+        .meta-item i {
+            margin-right: 5px;
+            color: #92d35e;
+        }
+        .application-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .btn-group .btn {
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        .btn-group .btn.active {
+            background-color: #92d35e;
+            color: white;
+            border-color: #92d35e;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: #dee2e6;
+            margin-bottom: 20px;
+        }
+        .empty-state h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 991px) {
+            .sidebar {
+                width: 70px;
+                padding: 15px 10px;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .search-bar {
+                max-width: 200px;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+                padding: 10px;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .sidebar .nav {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+            }
+            
+            .sidebar .nav-link {
+                margin-right: 5px;
+                margin-bottom: 0;
+                padding: 10px;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 5px;
+            }
+            
+            .sidebar .nav-link span {
+                display: inline;
+                font-size: 0.8rem;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding-top: 76px;
+            }
+            
+            .navbar .search-bar {
+                margin: 10px 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'cdashboard.html' %}">
+                <img src="../static/img/Company_logo.png" alt="Company Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Added Search Bar -->
+                <div class="search-bar mx-auto">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" class="form-control" placeholder="Search jobs, companies, or keywords...">
+                </div>
+                
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link notification-icon" href="#">
+                            <i class="bi bi-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% if request.session.user_id and profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'img/team-1.jpg' %}{% endif %}" 
+                                 alt="{{ user.username }}" 
+                                 class="user-avatar me-2"
+                                 id="navbarAvatar"
+                                 style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                            <span>{{ profile.first_name|default:'' }} {{ profile.last_name|default:'' }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'cprofile.html' %}">My Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout(); return false;">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'cdashboard.html' %}">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'cprofile.html' %}">
+                    <i class="bi bi-person"></i>
+                    <span>My Profile</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'jobs_list' %}">
+                    <i class="bi bi-search"></i>
+                    <span>Search Jobs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'jobs_list' %}">
+                    <i class="bi bi-briefcase-fill"></i>
+                    <span>Jobs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="{% url 'applied_jobs' %}">
+                    <i class="bi bi-briefcase"></i>
+                    <span>Applied Jobs</span>
+                </a>
+            </li>
+           
+            <li class="nav-item mt-4">
+                <a class="nav-link text-danger" href="#" onclick="logout(); return false;">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <h2 class="mb-4">My Job Applications</h2>
+            
+            <!-- Filter Section -->
+            <div class="filter-section mb-4">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary active" onclick="filterApplications('all', event)">All Applications</button>
+                            <button type="button" class="btn btn-outline-success" onclick="filterApplications('accepted', event)">Successful</button>
+                            <button type="button" class="btn btn-outline-warning" onclick="filterApplications('pending', event)">Pending</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="stats-card d-inline-block">
+                            <span class="me-3"><i class="bi bi-check-circle-fill text-success"></i> <span id="acceptedCount">0</span> Successful</span>
+                            <span class="me-3"><i class="bi bi-clock-fill text-warning"></i> <span id="pendingCount">0</span> Pending</span>
+                            <span><i class="bi bi-x-circle-fill text-danger"></i> <span id="rejectedCount">0</span> Rejected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="applications-container">
+                <!-- Applications will be loaded here -->
+                <div class="text-center">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allApplications = [];
+        
+        // Get CSRF token from cookie
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Function to get profile data
+        function getProfile() {
+            fetch('/api/candidate/profile/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.profile) {
+                    // Update navbar user info
+                    const navbarUserSpan = document.querySelector('.navbar .dropdown-toggle span');
+                    if (navbarUserSpan) {
+                        navbarUserSpan.textContent = `${data.profile.first_name || ''} ${data.profile.last_name || ''}`;
+                    }
+
+                    // Update avatar
+                    const avatarUrl = data.profile.avatar_url || '{% static "img/team-1.jpg" %}';
+                    
+                    // Update navbar avatar
+                    const navbarAvatar = document.getElementById('navbarAvatar');
+                    if (navbarAvatar) {
+                        navbarAvatar.src = avatarUrl;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching profile:', error);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadApplications();
+            getProfile();
+        });
+
+        function loadApplications() {
+            fetch('/api/applications/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '/login.html';
+                        return;
+                    }
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                allApplications = data.applications || [];
+                updateStats();
+                filterApplications('all');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('applications-container').innerHTML = `
+                    <div class="alert alert-danger">
+                        ${error.message || 'Failed to load applications. Please try again later.'}
+                    </div>
+                `;
+            });
+        }
+
+        function updateStats() {
+            const stats = {
+                accepted: allApplications.filter(app => app.status === 'accepted').length,
+                pending: allApplications.filter(app => app.status === 'pending').length,
+                rejected: allApplications.filter(app => app.status === 'rejected').length
+            };
+            
+            document.getElementById('acceptedCount').textContent = stats.accepted;
+            document.getElementById('pendingCount').textContent = stats.pending;
+            document.getElementById('rejectedCount').textContent = stats.rejected;
+        }
+
+        function filterApplications(status, event) {
+            const container = document.getElementById('applications-container');
+            container.innerHTML = '';
+
+            // Update active button
+            document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+            if (event) {
+                event.target.classList.add('active');
+            }
+
+            const filteredApplications = status === 'all' 
+                ? allApplications 
+                : allApplications.filter(app => app.status === status);
+
+            if (filteredApplications.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-briefcase"></i>
+                        <h4>No ${status === 'all' ? '' : status + ' '}applications found</h4>
+                        <p>${status === 'all' ? 'You haven\'t applied to any jobs yet.' : `You don't have any ${status} applications.`}</p>
+                        ${status === 'all' ? '<a href="/jobs-list/" class="btn btn-success">Browse Available Jobs</a>' : ''}
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort applications to show successful ones first
+            filteredApplications.sort((a, b) => {
+                if (a.status === 'accepted' && b.status !== 'accepted') return -1;
+                if (a.status !== 'accepted' && b.status === 'accepted') return 1;
+                return new Date(b.applied_date) - new Date(a.applied_date);
+            });
+
+            filteredApplications.forEach(app => {
+                const card = createApplicationCard(app);
+                container.appendChild(card);
+            });
+        }
+
+        function createApplicationCard(application) {
+            const div = document.createElement('div');
+            div.className = `application-card ${application.status === 'accepted' ? 'successful-application' : ''}`;
+            
+            const statusClass = {
+                'pending': 'status-pending',
+                'accepted': 'status-accepted',
+                'rejected': 'status-rejected'
+            }[application.status];
+
+            const statusText = {
+                'pending': 'Under Review',
+                'accepted': 'Application Successful',
+                'rejected': 'Not Selected'
+            }[application.status];
+
+            div.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="d-flex align-items-center">
+                        ${application.job.company_logo ? 
+                            `<img src="${application.job.company_logo}" alt="${application.job.company_name}" class="company-logo me-3">` :
+                            `<div class="company-logo bg-light d-flex align-items-center justify-content-center me-3">
+                                <i class="bi bi-building text-muted"></i>
+                            </div>`
+                        }
+                        <div>
+                            <h3 class="job-title">${application.job.title}</h3>
+                            <p class="company-name mb-0">${application.job.company_name}</p>
+                        </div>
+                    </div>
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                </div>
+                
+                <div class="d-flex flex-wrap mb-3">
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt"></i>
+                        ${application.job.location || 'Location not specified'}
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-briefcase"></i>
+                        ${application.job.job_type || 'Job type not specified'}
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-currency-dollar"></i>
+                        ${application.job.hide_salary ? 'Salary not disclosed' : application.job.salary}
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="application-date">
+                        <i class="bi bi-calendar-check"></i>
+                        Applied on ${new Date(application.applied_date).toLocaleDateString()}
+                    </div>
+                    ${application.status === 'accepted' ? 
+                        `<span class="success-badge">
+                            <i class="bi bi-check-circle"></i> Congratulations!
+                        </span>` : ''
+                    }
+                </div>
+            `;
+            
+            return div;
+        }
+
+        function logout() {
+            fetch('/api/logout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = '/login.html';
+            });
+        }
+    </script>
+</body>
+</html> 

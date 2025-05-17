@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: talenthive
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn project.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: project.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: FROM_EMAIL
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: talenthive-db
+          property: connectionString
+
+databases:
+  - name: talenthive-db
+    databaseName: talenthive
+    user: talenthive 

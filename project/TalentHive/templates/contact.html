@@ -1,0 +1,228 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Firmbee.com - Free Project Management Platform for remote teams"> 
+    <title>Name of company</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/0e035b9984.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/0e035b9984.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+
+<body>
+      <nav class="navbar navbar-expand-xl fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="{% url 'index.html' %}"><img class="w-100" src="{% static 'img/Company_logo.png' %}" alt=""></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-card-item">
+                <a class="nav-link" href="{% url 'index.html' %}">Home</a>
+              </li>
+              <li class="nav-card-item">
+                <a class="nav-link" href="{% url 'aboutus.html' %}">About</a>
+              </li>
+              <li class="nav-card-item">
+                <a class="nav-link active" href="{% url 'contact.html' %}">Contact</a>
+              </li>
+              <!-- <li class="nav-card-item">
+                <a class="nav-link" href="">Blog</a>
+              </li>          -->
+            </ul>
+            <ul class="right navbar-nav ms-auto">
+              <li class="nav-card-item-right">
+                <a class="nav-link" href="{% url 'login.html' %}">Post job</a>
+              </li>
+              <li class="nav-card-item-right">
+                <a class="nav-link" href="{% url 'login.html' %}">Sign in</a>
+              </li>
+              <li class="nav-card-item-right create-account">
+                <a class="nav-link" href="{% url 'sign-up.html' %}">Create account</a>
+              </li>       
+            </ul>
+          </div>
+        </div>
+      </nav>
+    <main>
+        <div class="main">
+          <div class="container">
+            <div class="row">
+                <div class="contact-page">
+                  <h2 class="underscore mb-5">Please <span class="green">let us know</span> if you have any questions</h2>
+                  <div class="line"></div>
+                  <p>We're here to help! Whether you have questions about job postings, employer services, or need assistance with your account, feel free to reach out to us.</p>
+                  <div class="line"></div>
+  
+                  <form id="contactForm">
+  
+                    <!-- Name input -->
+                    <div class="mb-3">
+                      <input class="form-control" id="name" name="name" type="text" placeholder="Name *" required />
+                      <div class="invalid-feedback">Name is required.</div>
+                    </div>
+                
+                    <!-- Email address input -->
+                    <div class="mb-3">
+                      <input class="form-control" id="emailAddress" name="email" type="email" placeholder="Email Address *" required />
+                      <div class="invalid-feedback">Email Address is required.</div>
+                    </div>
+                
+                    <!-- Message input -->
+                    <div class="mb-3">
+                      <textarea class="form-control" id="message" name="message" placeholder="Leave a Message" style="height: 10rem;" required></textarea>
+                      <div class="invalid-feedback">Message is required.</div>
+                    </div>
+                
+                    <!-- Form submit button -->
+                    <div class="d-grid">
+                      <button class="main-btn mt-0" id="submitButton" type="submit">Send message</button>
+                    </div>
+
+                    <!-- Success/Error Messages -->
+                    <div class="alert alert-success d-none mt-3" id="successMessage">
+                      Thank you for your message! We'll get back to you soon.
+                    </div>
+                    <div class="alert alert-danger d-none mt-3" id="errorMessage">
+                      There was an error sending your message. Please try again.
+                    </div>
+                  </form>
+                </div>
+            </div>
+          </div>
+        </div>
+    </main>
+      <!-- Footer -->
+      <footer>
+          <div class="container text-center text-md-start">
+            <div class="footer-wrap">
+              <div class="about">
+                <img src="{% static 'img/Company_logo.png' %}" alt="">
+                <p class="text-muted py-4">
+                  Start your career journey with TalentHive — a job portal designed to connect you with the right opportunities, faster and smarter.
+                </p>
+                <div class="social-media">
+                  <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/facebook-icon.svg' %}" alt=""></a>
+                  <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/twitter-icon.svg' %}" alt=""></a>
+                  <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/linkedin-icon.svg' %}" alt=""></a>
+                  <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/instagram-icon.svg' %}" alt=""></a>
+                </div>
+              </div>
+
+              <div class="company">
+                <h6 class="fw-bold">Company</h6>
+                <p><a href="{% url 'aboutus.html' %}">About us</a></p>
+                <!-- <p><a href="">Services</a></p>
+                <p><a href="">Team</a></p> -->
+                <!-- <p><a href="">Pricing</a></p>
+                <p><a href="">Project</a></p> -->
+                <!-- <p><a href="">Careers</a></p>
+                <p><a href="">Blog</a></p> -->
+                <p><a href="{% url 'login.html' %}">Login</a></p>
+              </div>
+              
+              <div class="useful-links">
+                <h6 class="fw-bold">Useful links</h6>
+                <p><a href="">Terms of Services</a></p>
+                <!-- <p><a href=""></a></p> -->
+                <p><a href="">Privacy Policy</a></p>
+                <!-- <p><a href="">Documentation</a></p>
+                <p><a href="">Changelog</a></p>
+                <p><a href="">Components</a></p> -->
+              </div>
+
+              <div class="newsletter">
+                <h6 class="fw-bold">Newsletter</h6>
+                <p class="text-muted">Sign up and receive the latest tips
+                  via email.</p>
+                  <form id="subscribe" action="">
+                    <label for="email">Your e-mail:</label>
+                    <input type="email" placeholder="e-mail:" name="email" required>
+                    <button type="submit" class="main-btn">Subscribe</button>
+                  </form>
+              </div>
+              
+            </div>
+          </div>
+        
+      </footer>
+    <script src="../static/js/nav-bg.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitButton = document.getElementById('submitButton');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Disable submit button and show loading state
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Sending...';
+            
+            try {
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('emailAddress').value,
+                    message: document.getElementById('message').value
+                };
+
+                const response = await fetch('/api/contact/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    // Show success message
+                    successMessage.classList.remove('d-none');
+                    errorMessage.classList.add('d-none');
+                    
+                    // Reset form
+                    this.reset();
+                } else {
+                    throw new Error('Failed to send message');
+                }
+            } catch (error) {
+                // Show error message
+                errorMessage.classList.remove('d-none');
+                successMessage.classList.add('d-none');
+                console.error('Error:', error);
+            } finally {
+                // Re-enable submit button
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Send message';
+            }
+        });
+
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

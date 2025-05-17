@@ -1,0 +1,310 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Firmbee.com - Free Project Management Platform for remote teams"> 
+    <title>Name of company</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/0e035b9984.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/0e035b9984.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-xl fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="{% url 'index.html' %}"><img class="w-100" src="{% static 'img/Company_logo.png' %}" alt=""></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-card-item">
+                <a class="nav-link" href="{% url 'index.html' %}">Home</a>
+              </li>
+              <li class="nav-card-item">
+                <a class="nav-link" href="{% url 'aboutus.html' %}">About</a>
+              </li>
+              <li class="nav-card-item">
+                <a class="nav-link" href="{% url 'contact.html' %}">Contact</a>
+              </li>
+              <!-- <li class="nav-card-item">
+                <a class="nav-link" href="">Blog</a>
+              </li>          -->
+            </ul>
+            <ul class="right navbar-nav ms-auto">
+              <li class="nav-card-item-right">
+                <a class="nav-link" href="">Post job</a>
+              </li>
+              <li class="nav-card-item-right">
+                <a class="nav-link active" href="{% url 'login.html' %}">Sign in</a>
+              </li>
+              <li class="nav-card-item-right create-account">
+                <a class="nav-link" href="{% url 'sign-up.html' %}">Create account</a>
+              </li>       
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <main>
+      <!-- <div class="main_login_body">
+      <div class="logn_container">
+        <div class="form-container">
+            <h2 id="login_h2">Login to Your Account</h2>
+            <form>
+                <input type="email" placeholder="Email Address" required class="login_input">
+                <input type="password" placeholder="Password" required class="login_input">
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+            <div class="links">
+                <a href="#">Forgot Password?</a><br>
+                <a href="#">Don't have an account? Sign Up</a>
+            </div>
+        </div>
+     </div>
+     </div>
+
+      <div class="find-jobs text-center">
+        <h1><span class="green">Find jobs</span> around<br>the world</h1>
+      </div>
+
+    </div> -->
+    <div class="intro">
+    <div class="container">
+      <div class="main_login_body">
+          <div class="left-panel">
+              <h2>New to JobPortal?</h2>
+              <ul>
+                  <li>✅ One click apply using Job profile.</li>
+                  <li>✅ Get relevant job recommendations.</li>
+                  <li>✅ Showcase profile to top companies and consultants.</li>
+                  <li>✅ Know application status on applied jobs.</li>
+              </ul>
+              <button class="register-btn" onclick="location.href='sign-up.html'" type="button">Register for Free</button>
+          </div>
+          <div class="right-panel">
+              <h2>Login</h2>
+              <form id="loginForm" >
+                  <label for="username">Email ID / Username</label>
+                  <input type="text" id="email" placeholder="Enter Email ID " required>
+  
+                  <label for="password">Password</label>
+                  <input type="password" id="password" placeholder="Enter Password" required>
+                  <div class="show-password">
+                      <input type="checkbox" id="show"> Show
+                  
+                  </div>
+                  <a href="{% url 'forgot_password.html' %}" class="forgot-password">Forgot Password?</a>
+                  <button type="submit" class="login-btn">Login</button>
+                  <p id="response"></p>
+
+                  
+                  <!-- <div class="otp-login">
+                      <p>Use OTP to Login</p>
+                  </div>
+                  <div class="google-login">
+                      <p>Or</p>
+                      <button class="google-btn">Sign in with Google</button>
+                  </div> -->
+              </form>
+              
+          </div>
+      </div>
+      
+      </div>
+      </div>
+      <div class="find-jobs text-center">
+        <h1><span class="green">Find jobs</span> around<br>the world</h1>
+      </div>
+    </main>
+
+
+       <!-- Footer -->
+       <footer>
+        <div class="container text-center text-md-start">
+          <div class="footer-wrap">
+            <div class="about">
+              <img src="{% static 'img/Company_logo.png' %}" alt="">
+              <p class="text-muted py-4">
+                Start your career journey with TalentHive — a job portal designed to connect you with the right opportunities, faster and smarter.
+              </p>
+              <div class="social-media">
+                <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/facebook-icon.svg' %}" alt=""></a>
+                <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/twitter-icon.svg' %}" alt=""></a>
+                <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/linkedin-icon.svg' %}" alt=""></a>
+                <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/instagram-icon.svg' %}" alt=""></a>
+              </div>
+            </div>
+
+            <div class="company">
+              <h6 class="fw-bold">Company</h6>
+              <p><a href="{% url 'aboutus.html' %}">About us</a></p>
+              <!-- <p><a href="">Services</a></p>
+              <p><a href="">Team</a></p> -->
+              <!-- <p><a href="">Pricing</a></p>
+              <p><a href="">Project</a></p> -->
+              <!-- <p><a href="">Careers</a></p>
+              <p><a href="">Blog</a></p> -->
+              <p><a href="{% url 'login.html' %}">Login</a></p>
+            </div>
+            
+            <div class="useful-links">
+              <h6 class="fw-bold">Useful links</h6>
+              <p><a href="">Terms of Services</a></p>
+              <p><a href="">Privacy Policy</a></p>
+              <!-- <p><a href="">Documentation</a></p>
+              <p><a href="">Changelog</a></p>
+              <p><a href="">Components</a></p> -->
+            </div>
+
+            <div class="newsletter">
+              <h6 class="fw-bold">Newsletter</h6>
+              <p class="text-muted">Sign up and receive the latest tips
+                via email.</p>
+                <form id="subscribe" action="">
+                  <label for="email">Your e-mail:</label>
+                  <input type="email" placeholder="e-mail:" name="email" required>
+                  <button type="submit" class="main-btn">Subscribe</button>
+                </form>
+            </div>
+            
+          </div>
+       
+        </div>
+      
+    </footer>
+
+     <script src="{% static 'js/nav-bg.js' %}"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- <nav class="bg-blue-600 p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-white text-lg font-bold">Job Portal</a>
+            <div>
+                <a href="#" class="text-white px-4">Home</a>
+                <a href="#" class="text-white px-4">Jobs</a>
+                <a href="#" class="text-white px-4">Contact</a>
+            </div>
+        </div>
+    </nav> -->
+    
+    <!-- Login Form -->
+    <!-- <div class="flex justify-center items-center h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+            <h2 class="text-2xl font-bold text-center mb-6">Login</h2>
+            <form>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Username / Email</label>
+                    <input type="text" class="w-full p-2 border rounded mt-1" placeholder="Enter your email or username">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Password</label>
+                    <input type="password" class="w-full p-2 border rounded mt-1" placeholder="Enter your password">
+                </div>
+                <div class="text-right mb-4">
+                    <a href="#" class="text-blue-600 text-sm">Forgot Password?</a>
+                </div>
+                <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
+            </form>
+            <p class="text-center text-gray-600 mt-4">Don't have an account? <a href="#" class="text-blue-600">Sign up</a></p>
+        </div>
+    </div> -->
+
+     <script>
+      const form = document.getElementById('loginForm');
+
+      form.addEventListener('submit', async function(event) {
+          event.preventDefault();  // prevent page reload
+      
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+      
+          const requestBody = { email, password };
+      
+          try {
+              const response = await fetch('http://127.0.0.1:8000/login/', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(requestBody)
+              });
+      
+              const data = await response.json();
+              const responseElement = document.getElementById('response');
+      
+              if (response.ok) {
+                  if (data.is_verified) {
+                      // If user is already verified, redirect based on role
+                      if (data.role === 'admin') {
+                          window.location.href = '/dashboard/';
+                      } else if (data.role === 'hr') {
+                          // Store HR ID if needed
+                          if (data.user_id) {
+                              localStorage.setItem('hr_id', data.user_id);
+                          }
+                          window.location.href = data.redirect_url;  // This will be '/company_selection.html'
+                      } else {
+                          window.location.href = '/cdashboard.html';
+                      }
+                  } else {
+                      // If user is not verified, send OTP and redirect to verification page
+                      try {
+                          const otpResponse = await fetch('http://127.0.0.1:8000/send_otp/', {
+                              method: 'POST',
+                              headers: {
+                                  'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify({ email })
+                          });
+
+                          const otpData = await otpResponse.json();
+                          
+                          if (otpResponse.ok) {
+                              window.location.href = data.redirect_url;
+                          } else {
+                              responseElement.innerText = otpData.error || 'Failed to send OTP';
+                              responseElement.style.color = 'red';
+                          }
+                      } catch (otpError) {
+                          console.error('OTP Error:', otpError);
+                          responseElement.innerText = "Failed to send OTP";
+                          responseElement.style.color = 'red';
+                      }
+                  }
+              } else {
+                  responseElement.innerText = data.error || 'Login failed';
+                  responseElement.style.color = 'red';
+              }
+          } catch (error) {
+              console.error('Error:', error);
+              const responseElement = document.getElementById('response');
+              responseElement.innerText = "Something went wrong!";
+              responseElement.style.color = 'red';
+          }
+      });
+      
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

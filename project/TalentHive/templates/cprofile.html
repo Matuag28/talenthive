@@ -1,0 +1,1134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Modern Job Portal Profile">
+    <title>My Profile</title>
+    {% csrf_token %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        /* Base Styling */
+        *,
+        *::after,
+        *::before {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: #9d9d9d;
+            background-color: #f8f9fa;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #4b4b4b;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            color: #4b4b4b;
+            font-weight: 700;
+        }
+        
+        input, textarea, select {
+            border-radius: 0px;
+            border: 1px solid #e7e7e7 !important;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: 0px !important;
+            box-shadow: none !important;
+            border: 1px solid #92d35e !important;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #4b4b4b;
+            font-weight: 900;
+        }
+        
+        .green {
+            color: #92d35e;
+        }
+
+        .bg-green {
+            background-color: #92d35e;
+        }
+        
+        /* Navbar Styling */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1030;
+            padding: 15px 0;
+        }
+
+        .nav-bg {
+            background-image: url("../static/img/hader-bg.png");
+            background-color: #f1f7eb;
+            background-repeat: no-repeat;
+            background-position: center 0;
+        }
+        
+        .navbar .navbar-brand {
+            display: inline-block;
+            width: 170px;
+            margin-right: 30px;
+        }
+        
+        .navbar .navbar-brand img {
+            width: 100%;
+            height: 50px;
+        }
+        
+        .navbar .notification-icon {
+            position: relative;
+            font-size: 1.2rem;
+            color: #4b4b4b;
+            margin-right: 20px;
+        }
+        
+        .navbar .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #92d35e;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25em 0.6em;
+            font-size: 0.75rem;
+        }
+        
+        .navbar .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .logout-btn {
+            color: #dc3545;
+            background: none;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        /* Search Bar Styling */
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+        }
+        
+        .search-bar .form-control {
+            padding-left: 40px;
+            border-radius: 50px !important;
+            background-color: #f8f9fa;
+        }
+        
+        .search-bar .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9d9d9d;
+        }
+        
+        /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 76px;
+            height: calc(100vh - 76px);
+            width: 250px;
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1020;
+            padding: 20px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link {
+            padding: 12px 15px;
+            color: #4b4b4b;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover {
+            background-color: #f1f7eb;
+            color: #92d35e;
+        }
+        
+        .sidebar .nav-link.active {
+            background-color: #92d35e;
+            color: #ffffff;
+            font-weight: 700;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            padding-top: 96px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Profile Card Styling */
+        .profile-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 30px;
+        }
+        
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .profile-header-info h2 {
+            margin-bottom: 5px;
+        }
+        
+        .profile-header-info p {
+            margin-bottom: 10px;
+        }
+        
+        .social-links a {
+            margin-right: 15px;
+            font-size: 1.2rem;
+            color: #9d9d9d;
+        }
+        
+        .social-links a:hover {
+            color: #92d35e;
+        }
+        
+        /* Tab Content Styling */
+        .nav-tabs {
+            border-bottom: 1px solid #e7e7e7;
+            margin-bottom: 20px;
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            color: #9d9d9d;
+            font-weight: 700;
+            padding: 10px 15px;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #92d35e;
+            border-bottom: 2px solid #92d35e;
+        }
+        
+        /* Form Styling */
+        .form-label {
+            color: #4b4b4b;
+            font-weight: 700;
+        }
+        
+        .form-control {
+            padding: 12px;
+        }
+        
+        /* Skills Section */
+        .skill-badge {
+            background-color: #f1f7eb;
+            color: #4b4b4b;
+            border-radius: 50px;
+            padding: 8px 15px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        
+        .skill-badge i {
+            color: #92d35e;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+        
+        /* Education/Experience Cards */
+        .timeline-card {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 25px;
+        }
+        
+        .timeline-card:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #92d35e;
+        }
+        
+        .timeline-card:after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 12px;
+            width: 2px;
+            height: calc(100% + 13px);
+            background-color: #e7e7e7;
+        }
+        
+        .timeline-card:last-child:after {
+            display: none;
+        }
+        
+        .timeline-period {
+            background-color: #f1f7eb;
+            color: #92d35e;
+            font-size: 0.8rem;
+            padding: 3px 12px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        
+        /* Button Styles */
+        .main-btn {
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            background-color: #92d35e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .main-btn:hover {
+            color: white;
+            background-color: #4b4b4b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .outline-btn {
+            text-align: center;
+            text-decoration: none;
+            color: #4b4b4b;
+            font-weight: 600;
+            background-color: transparent;
+            border: 1px solid #e7e7e7;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .outline-btn:hover {
+            color: #4b4b4b;
+            border-color: #92d35e;
+            background-color: #f1f7eb;
+        }
+        
+        /* Portfolio styling */
+        .portfolio-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        
+        .portfolio-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(146, 211, 94, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 12px;
+        }
+        
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+        
+        .portfolio-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .portfolio-overlay h5 {
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        .portfolio-overlay p {
+            color: white;
+            text-align: center;
+            padding: 0 15px;
+            margin-bottom: 15px;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 991px) {
+            .sidebar {
+                width: 70px;
+                padding: 15px 10px;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .search-bar {
+                max-width: 200px;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+                padding: 10px;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .sidebar .nav {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+            }
+            
+            .sidebar .nav-link {
+                margin-right: 5px;
+                margin-bottom: 0;
+                padding: 10px;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 5px;
+            }
+            
+            .sidebar .nav-link span {
+                display: inline;
+                font-size: 0.8rem;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding-top: 76px;
+            }
+            
+            .navbar .search-bar {
+                margin: 10px 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="cdashboard.html">
+                <img src="../static/img/Company_logo.png" alt="Company Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Added Search Bar -->
+                <div class="search-bar mx-auto">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" class="form-control" placeholder="Search jobs, companies, or keywords...">
+                </div>
+                
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link notification-icon" href="#">
+                            <i class="bi bi-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% if request.session.user_id and profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'img/team-1.jpg' %}{% endif %}" 
+                                 alt="{{ user.username }}" 
+                                 class="user-avatar me-2"
+                                 style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                            <span>{{ profile.first_name|default:'' }} {{ profile.last_name|default:'' }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="cprofile.html">My Profile</a></li>
+                            <!-- <li><a class="dropdown-item" href="#">Settings</a></li> -->
+                            <!-- <li><hr class="dropdown-divider"></li> -->
+                            <!-- <li><a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li> -->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'cdashboard.html' %}">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="{% url 'cprofile.html' %}">
+                    <i class="bi bi-person"></i>
+                    <span>My Profile</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="bi bi-search"></i>
+                    <span>Search Jobs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'jobs_list' %}">
+                    <i class="bi bi-briefcase-fill"></i>
+                    <span>Jobs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'applied_jobs' %}">
+                    <i class="bi bi-briefcase"></i>
+                    <span>Applied Jobs</span>
+                </a>
+            </li>
+            
+            <li class="nav-item mt-4">
+                <a class="nav-link text-danger" href="#" onclick="logout(); return false;">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- Profile Header -->
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar-container">
+                        <img src="{% if request.session.user_id and profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'img/team-1.jpg' %}{% endif %}" 
+                             alt="{{ user.username }}" 
+                             class="profile-avatar"
+                             id="profileAvatar"
+                             style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%;">
+                    </div>
+                    <div class="profile-header-info">
+                        <h2>{{ profile.first_name|default:'' }} {{ profile.last_name|default:'' }}</h2>
+                        <p class="green fw-bold">{{ profile.job_title|default:'No job title set' }}</p>
+                        <p><i class="bi bi-geo-alt"></i> {{ profile.location|default:'No location set' }}</p>
+                        <div class="social-links">
+                            {% if profile.social_media.linkedin %}
+                            <a href="{{ profile.social_media.linkedin }}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                            {% endif %}
+                            {% if profile.social_media.dribbble %}
+                            <a href="{{ profile.social_media.dribbble }}" target="_blank"><i class="bi bi-dribbble"></i></a>
+                            {% endif %}
+                            {% if profile.social_media.behance %}
+                            <a href="{{ profile.social_media.behance }}" target="_blank"><i class="bi bi-behance"></i></a>
+                            {% endif %}
+                            {% if profile.social_media.website %}
+                            <a href="{{ profile.social_media.website }}" target="_blank"><i class="bi bi-globe"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="ms-auto">
+                        <a href="{% url 'ceditprofile.html' %}" class="outline-btn mb-2 d-block"><i class="bi bi-pencil me-2"></i>Edit Profile</a>
+                        <a href="{% url 'cpreview.html' %}" class="outline-btn d-block"><i class="bi bi-eye me-2"></i>Preview</a>
+                    </div>
+                </div>
+                
+                <!-- Profile Navigation Tabs -->
+                <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">About</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="experience-tab" data-bs-toggle="tab" data-bs-target="#experience" type="button" role="tab" aria-controls="experience" aria-selected="false">Experience</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="education-tab" data-bs-toggle="tab" data-bs-target="#education" type="button" role="tab" aria-controls="education" aria-selected="false">Education</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="skills-tab" data-bs-toggle="tab" data-bs-target="#skills" type="button" role="tab" aria-controls="skills" aria-selected="false">Skills</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="portfolio-tab" data-bs-toggle="tab" data-bs-target="#portfolio" type="button" role="tab" aria-controls="portfolio" aria-selected="false">Portfolio</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+                    </li>
+                </ul>
+                
+                <!-- Tab Content -->
+                <div class="tab-content" id="profileTabsContent">
+                    <!-- About Tab -->
+                    <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <h4 class="mb-3">Professional Summary</h4>
+                                <p>{{ profile.professional_summary|default:'No professional summary provided.' }}</p>
+                                
+                                <h4 class="mb-3 mt-4">Career Objective</h4>
+                                <p>{{ profile.career_objective|default:'No career objective provided.' }}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="profile-card mb-4">
+                                    <!-- <div class="text-center mb-4">
+                                        <img src="{% if request.session.user_id and profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'img/team-1.jpg' %}{% endif %}" 
+                                             alt="{{ user.username }}" 
+                                             class="profile-avatar"
+                                             id="rightSectionAvatar"
+                                             style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid #92d35e;">
+                                    </div> -->
+                                    <h5 class="mb-3">Personal Details</h5>
+                                    <div class="mb-2">
+                                        <strong>Name:</strong> {{ profile.first_name|default:'' }} {{ profile.last_name|default:'' }}
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Email:</strong> {{ user.email }}
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Phone:</strong> {{ profile.phone|default:'Not provided' }}
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Location:</strong> {{ profile.location|default:'Not provided' }}
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Language:</strong> {{ profile.languages|default:'Not provided' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Experience Tab -->
+                    <div class="tab-pane fade" id="experience" role="tabpanel" aria-labelledby="experience-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4>Work Experience</h4>
+                        </div>
+                        <div id="workExperienceContainer">
+                            {% if profile.work_experience %}
+                                {% for experience in profile.work_experience %}
+                                <div class="timeline-card experience-item" data-id="{{ forloop.counter0 }}">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <span class="timeline-period">{{ experience.period }}</span>
+                                            <h5>{{ experience.title }}</h5>
+                                            <p class="fw-bold mb-1">{{ experience.company }}</p>
+                        </div>
+                        </div>
+                                    <p class="mb-3">{{ experience.description }}</p>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted">No work experience added yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Education Tab -->
+                    <div class="tab-pane fade" id="education" role="tabpanel" aria-labelledby="education-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4>Education Background</h4>
+                        </div>
+                        <div id="educationContainer">
+                            {% if profile.education %}
+                                {% for edu in profile.education %}
+                                <div class="timeline-card education-item" data-id="{{ forloop.counter0 }}">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                            <span class="timeline-period">{{ edu.period }}</span>
+                                            <h5>{{ edu.degree }}</h5>
+                                            <p class="fw-bold mb-1">{{ edu.institution }}</p>
+                                    </div>
+                                </div>
+                                    <p>{{ edu.description }}</p>
+                            </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted">No education details added yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Skills Tab -->
+                    <div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skills-tab">
+                        <h4 class="mb-3">Skills & Expertise</h4>
+                        {% if profile.skills %}
+                            {% for skill in profile.skills %}
+                            <span class="skill-badge">{{ skill }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <p>No skills added yet.</p>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Portfolio Tab -->
+                    <div class="tab-pane fade" id="portfolio" role="tabpanel" aria-labelledby="portfolio-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="mb-0">My Portfolio</h4>
+                            <a href="#" class="outline-btn"><i class="bi bi-plus-circle me-2"></i>Add Project</a>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="portfolio-item">
+                                    <img src="/api/placeholder/400/320" alt="Education App UX Design">
+                                    <div class="portfolio-overlay">
+                                        <h5>Education App UX Design</h5>
+                                        <p>A comprehensive UX redesign for a language learning application</p>
+                                        <a href="#" class="main-btn">View Project</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="portfolio-item">
+                                    <img src="/api/placeholder/400/320" alt="E-commerce Website">
+                                    <div class="portfolio-overlay">
+                                        <h5>E-commerce Website</h5>
+                                        <p>End-to-end design for a fashion e-commerce platform</p>
+                                        <a href="#" class="main-btn">View Project</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="portfolio-item">
+                                    <img src="/api/placeholder/400/320" alt="Banking App">
+                                    <div class="portfolio-overlay">
+                                        <h5>Banking App</h5>
+                                        <p>Mobile banking application with focus on security and ease of use</p>
+                                        <a href="#" class="main-btn">View Project</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="portfolio-item">
+                                    <img src="/api/placeholder/400/320" alt="Travel Platform">
+                                    <div class="portfolio-overlay">
+                                        <h5>Travel Platform</h5>
+                                        <p>Trip planning and booking service with personalized recommendations</p>
+                                        <a href="#" class="main-btn">View Project</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="portfolio-item">
+                                    <img src="/api/placeholder/400/320" alt="Healthcare Dashboard">
+                                    <div class="portfolio-overlay">
+                                        <h5>Healthcare Dashboard</h5>
+                                        <p>User-friendly interface for healthcare providers to manage patient data</p>
+                                        <a href="#" class="main-btn">View Project</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="portfolio-item">
+                                    <img src="/api/placeholder/400/320" alt="Smart Home App">
+                                    <div class="portfolio-overlay">
+                                        <h5>Smart Home App</h5>
+                                        <p>IoT control application for managing connected home devices</p>
+                                        <a href="#" class="main-btn">View Project</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Tab -->
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h4 class="mb-4">Contact Information</h4>
+                                <form id="contactForm">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" value="{{ user.email }}" readonly>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" id="phone" value="{{ profile.phone|default:'' }}">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="website" class="form-label">Website</label>
+                                        <input type="url" class="form-control" id="website" value="{{ profile.website|default:'' }}">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">Address</label>
+                                        <textarea class="form-control" id="address" rows="3">{{ profile.location|default:'' }}</textarea>
+                                    </div>
+                                    
+                                    <button type="submit" class="main-btn">Save Changes</button>
+                                </form>
+                            </div>
+                            
+                            <div class="col-lg-6">
+                                <h4 class="mb-4">Social Profiles</h4>
+                                <form id="socialForm">
+                                    <div class="mb-3">
+                                        <label for="linkedin" class="form-label">LinkedIn</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-linkedin"></i></span>
+                                            <input type="url" class="form-control" id="linkedin" value="{{ profile.social_media.linkedin|default:'' }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="dribbble" class="form-label">Dribbble</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-dribbble"></i></span>
+                                            <input type="url" class="form-control" id="dribbble" value="{{ profile.social_media.dribbble|default:'' }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="behance" class="form-label">Behance</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-behance"></i></span>
+                                            <input type="url" class="form-control" id="behance" value="{{ profile.social_media.behance|default:'' }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="twitter" class="form-label">Twitter</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-twitter"></i></span>
+                                            <input type="url" class="form-control" id="twitter" value="{{ profile.social_media.twitter|default:'' }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="instagram" class="form-label">Instagram</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-instagram"></i></span>
+                                            <input type="url" class="form-control" id="instagram" value="{{ profile.social_media.instagram|default:'' }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="main-btn">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <footer class="mt-5 pt-4 border-top">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>&copy; 2025 TalentHive. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="#" class="me-3">Privacy Policy</a>
+                        <a href="#" class="me-3">Terms of Service</a>
+                        <a href="#">Contact Us</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="../static/js/nav-bg.js"></script>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+    <script>
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Function to get profile data
+        function getProfile() {
+            fetch('/api/candidate/profile/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.profile) {
+                    // Update profile header
+                    document.querySelector('.profile-header-info h2').textContent = 
+                        `${data.profile.first_name || ''} ${data.profile.last_name || ''}`;
+                    document.querySelector('.profile-header-info .green').textContent = 
+                        data.profile.job_title || 'No job title set';
+                    document.querySelector('.profile-header-info p:nth-child(3)').innerHTML = 
+                        `<i class="bi bi-geo-alt"></i> ${data.profile.location || 'No location set'}`;
+
+                    // Update navbar user info
+                    const navbarUserSpan = document.querySelector('.navbar .dropdown-toggle span');
+                    if (navbarUserSpan) {
+                        navbarUserSpan.textContent = `${data.profile.first_name || ''} ${data.profile.last_name || ''}`;
+                    }
+
+                    // Update all avatars
+                    const avatarUrl = data.profile.avatar_url || '{% static "img/team-1.jpg" %}';
+                    console.log('Avatar URL:', avatarUrl); // Debug log
+                    
+                    // Update profile header avatar
+                    const profileAvatar = document.getElementById('profileAvatar');
+                    if (profileAvatar) {
+                        profileAvatar.src = avatarUrl;
+                        console.log('Updated profile avatar:', profileAvatar.src); // Debug log
+                    }
+
+                    // Update navbar avatar
+                    const navbarAvatar = document.querySelector('.navbar .user-avatar');
+                    if (navbarAvatar) {
+                        navbarAvatar.src = avatarUrl;
+                        console.log('Updated navbar avatar:', navbarAvatar.src); // Debug log
+                    }
+
+                    // Update about section
+                    document.querySelector('#about .col-lg-8 p:first-child').textContent = 
+                        data.profile.professional_summary || 'No professional summary provided.';
+                    document.querySelector('#about .col-lg-8 p:last-child').textContent = 
+                        data.profile.career_objective || 'No career objective provided.';
+
+                    // Update personal details
+                    const personalDetails = document.querySelector('#about .profile-card');
+                    personalDetails.innerHTML = `
+                        <h5 class="mb-3">Personal Details</h5>
+                        <div class="mb-2">
+                            <strong>Name:</strong> ${data.profile.first_name || ''} ${data.profile.last_name || ''}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Email:</strong> ${data.profile.email || ''}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Phone:</strong> ${data.profile.phone || 'Not provided'}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Location:</strong> ${data.profile.location || 'Not provided'}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Language:</strong> ${data.profile.languages || 'Not provided'}
+                        </div>
+                    `;
+
+                    // Update work experience
+                    const workExpContainer = document.getElementById('workExperienceContainer');
+                    if (data.profile.work_experience && data.profile.work_experience.length > 0) {
+                        workExpContainer.innerHTML = data.profile.work_experience.map((exp, index) => `
+                            <div class="timeline-card experience-item" data-id="${index}">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <span class="timeline-period">${exp.period}</span>
+                                        <h5>${exp.title}</h5>
+                                        <p class="fw-bold mb-1">${exp.company}</p>
+                                    </div>
+                                </div>
+                                <p class="mb-3">${exp.description}</p>
+                            </div>
+                        `).join('');
+                    } else {
+                        workExpContainer.innerHTML = '<p class="text-muted">No work experience added yet.</p>';
+                    }
+
+                    // Update education
+                    const educationContainer = document.getElementById('educationContainer');
+                    if (data.profile.education && data.profile.education.length > 0) {
+                        educationContainer.innerHTML = data.profile.education.map((edu, index) => `
+                            <div class="timeline-card education-item" data-id="${index}">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <span class="timeline-period">${edu.period}</span>
+                                        <h5>${edu.degree}</h5>
+                                        <p class="fw-bold mb-1">${edu.institution}</p>
+                                    </div>
+                                </div>
+                                <p>${edu.description}</p>
+                            </div>
+                        `).join('');
+                    } else {
+                        educationContainer.innerHTML = '<p class="text-muted">No education details added yet.</p>';
+                    }
+
+                    // Update skills
+                    const skillsContainer = document.querySelector('#skills');
+                    if (data.profile.skills && data.profile.skills.length > 0) {
+                        skillsContainer.innerHTML = `
+                            <h4 class="mb-3">Skills & Expertise</h4>
+                            ${data.profile.skills.map(skill => `
+                                <span class="skill-badge">${skill}</span>
+                            `).join('')}
+                        `;
+                    } else {
+                        skillsContainer.innerHTML = `
+                            <h4 class="mb-3">Skills & Expertise</h4>
+                            <p>No skills added yet.</p>
+                        `;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching profile:', error);
+                showMessage('Error loading profile data. Please try again.', 'error');
+            });
+        }
+
+        // Load profile data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            getProfile();
+        });
+
+        // Function to show message
+        function showMessage(message, type) {
+            const responseMessage = document.getElementById('responseMessage');
+            if (responseMessage) {
+                responseMessage.className = `alert alert-${type === 'success' ? 'success' : 'danger'}`;
+                responseMessage.textContent = message;
+                responseMessage.style.display = 'block';
+                
+                // Hide message after 3 seconds
+                setTimeout(() => {
+                    responseMessage.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Function to refresh avatar after upload
+        function refreshAvatar() {
+            const formData = new FormData();
+            const fileInput = document.getElementById('avatar');
+            if (fileInput.files.length > 0) {
+                formData.append('avatar', fileInput.files[0]);
+            }
+            fetch('/api/profile/avatar/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('Avatar updated successfully!', 'success');
+                    getProfile();
+                } else {
+                    showMessage('Error updating avatar. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating avatar:', error);
+                showMessage('Error updating avatar. Please try again.', 'error');
+            });
+        }
+    </script>
+</body>
+</html>

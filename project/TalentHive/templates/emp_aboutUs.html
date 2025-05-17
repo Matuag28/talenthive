@@ -1,0 +1,976 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | TalentHive</title>
+    
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #4e73df;
+            --primary-dark: #3755c1;
+            --primary-light: #6e95ff;
+            --secondary-color: #1cc88a;
+            --dark-color: #2e384d;
+            --light-color: #f8f9fc;
+            --gray-color: #858796;
+            --success-color: #1cc88a;
+            --error-color: #e74a3b;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f9fc;
+            color: var(--dark-color);
+        }
+        
+        /* Navigation Bar Styles */
+        .navbar {
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        } 
+
+        .nav-bg {
+            background-image: url("../static/img/hader-bg.png");
+            background-color: #f1f7eb;
+            background-repeat: no-repeat;
+            background-position: center 0;
+        }
+        
+        .navbar-brand span {
+            color: var(--secondary-color);
+        }
+        
+        .navbar-scrolled {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .navbar .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .navbar .nav-link:hover::after {
+            width: 80%;
+        }
+        
+        .navbar .btn-post-job {
+            /* background: linear-gradient(45deg, var(--primary-color), var(--primary-light)); */
+            background-color: #92d35e;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(78, 115, 223, 0.25);
+        }
+        
+        .navbar .btn-post-job:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(78, 115, 223, 0.4);
+        }
+        
+        /* Hero Section Styles */
+        .hero-section {
+            position: relative;
+            /* background: linear-gradient(135deg, rgba(46, 56, 77, 0.9), rgba(78, 115, 223, 0.85)), 
+                        url('/api/placeholder/1200/400') center/cover no-repeat; */
+            /* background-color: #4b4b4b; */
+            background-color: white;
+            /* color: white; */
+            color: #4b4b4b;
+            padding: 5rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-content {
+            animation: fadeInUp 1s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-subtitle {
+            font-weight: 300;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* About Us Section Styles */
+        .about-section {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            position: relative;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        .about-img {
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .about-img:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+            color: white;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            margin: 0 auto 1rem auto;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-text {
+            color: var(--gray-color);
+            font-weight: 500;
+        }
+        
+        /* Mission Vision Styles */
+        .mission-vision {
+            background-color: white;
+            padding: 4rem 0;
+        }
+        
+        .mv-card {
+            padding: 2rem;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .mv-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mv-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .mv-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        /* Team Section Styles */
+        .team-section {
+            padding: 4rem 0;
+            background-color: var(--light-color);
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .team-img-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .team-img {
+            transition: transform 0.5s ease;
+        }
+        
+        .team-card:hover .team-img {
+            transform: scale(1.05);
+        }
+        
+        .team-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .team-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .team-position {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .team-social {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        
+        .social-link {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        /* Testimonial Section */
+        .testimonial-section {
+            padding: 4rem 0;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quote-icon {
+            font-size: 4rem;
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            color: rgba(78, 115, 223, 0.1);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 1rem;
+        }
+        
+        .author-info h5 {
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+        
+        .author-position {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+            padding: 4rem 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-subtitle {
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn-cta {
+            background-color: #92d35e;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-cta:hover {
+            background-color: #4b4b4b;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.453);
+            color: rgb(243, 243, 243);
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0 2rem 0;
+        }
+        
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-link:hover {
+            color: white;
+        }
+        .btn{
+            background-color: #92d35e;
+            color: white;
+        }
+        .btn:hover{
+            background-color: var(--primary-dark);
+        }
+        
+        .social-icons .bi {
+            font-size: 1.25rem;
+            margin-right: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons .bi:hover {
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        /* Animation for elements */
+        .animate-fade-up {
+            animation: fadeInUp 1s ease;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .navbar .btn-post-job {
+                margin-top: 0.5rem;
+            }
+            
+            .hero-section {
+                padding: 3rem 0;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .stats-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <!-- Brand/Logo -->
+            <a class="navbar-brand" href="#"><img src="../static/img/Employer_logo.png" alt="" width="170px" height="40px"></a>
+            
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation Items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="emp_aboutUs.html">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="emp_contactUs.html">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="emp_signin.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="emp_signup.html">Sign Up</a>
+                    </li>
+                </ul>
+                
+                <!-- Post a Job Button -->
+                <a href="emp_signin.html" class="btn btn-post-job text-white">Post a Job</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center hero-content">
+                    <h1 class="hero-title">About <span style="color: #92d35e;">TalentHive!</span></h1>
+                    <p class="hero-subtitle">"Talenthive is built with a simple mission — to connect great talent with companies ready to grow. Get to know our vision, our team, and how we’re setting out to make hiring smarter and more human."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="section-title">Our Story</h2>
+                    <p class="mb-4">At Talenthive, we understand that hiring the right people is one of the most important—and sometimes most challenging—parts of growing a business. That’s why we’ve created a platform that makes finding the right candidates simpler, faster, and more effective.</p>
+                    <p class="mb-4">We’re here to help you connect with job seekers who are not just qualified on paper, but genuinely excited to be part of something meaningful. Whether you're looking for experienced professionals or fresh talent ready to learn and grow, Talenthive gives you access to a wide range of candidates from all backgrounds.</p>
+                    <p>We’ve built tools to make your hiring process smoother—from easy job posting and smart filtering to tracking applications in real-time. But more than that, we care about helping you find people who fit your team and your vision.
+
+                        Talenthive isn’t just about filling roles. It’s about building strong teams that help your business move forward.
+                        
+                        </p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-img">
+                        <img src="../static/img/Company_logo.png" alt="TalentHive Team" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <!-- <div class="row mt-5 pt-5">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="section-title mx-auto">Our Impact</h2>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="bi bi-building"></i>
+                        </div>
+                        <div class="stats-number">15,000+</div>
+                        <div class="stats-text">Companies</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="stats-number">2.5M+</div>
+                        <div class="stats-text">Candidates</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="bi bi-briefcase"></i>
+                        </div>
+                        <div class="stats-number">500K+</div>
+                        <div class="stats-text">Jobs Filled</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="bi bi-globe"></i>
+                        </div>
+                        <div class="stats-number">40+</div>
+                        <div class="stats-text">Countries</div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </section>
+
+    <!-- Mission & Vision Section -->
+    <section class="mission-vision">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="section-title mx-auto">Mission & Vision</h2>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="mv-card">
+                        <div class="mv-icon">
+                            <i class="bi bi-bullseye"></i>
+                        </div>
+                        <h3 class="mv-title">Our Mission</h3>
+                        <p>We're here to help people find jobs they love and help companies find people who love what they do.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="mv-card">
+                        <div class="mv-icon">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                        <h3 class="mv-title">Our Vision</h3>
+                        <p>To become a leading recruitment platform where businesses find their best-fit talent, and individuals find opportunities to thrive.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="mv-card">
+                        <div class="mv-icon">
+                            <i class="bi bi-star"></i>
+                        </div>
+                        <h3 class="mv-title">Our Values</h3>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <h5 class="mb-2">Innovation</h5>
+                                <p>We consistently push boundaries and embrace new technologies to improve our services.</p>
+                            </div>
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <h5 class="mb-2">Integrity</h5>
+                                <p>We operate with honesty, transparency, and ethical behavior in all our interactions.</p>
+                            </div>
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <h5 class="mb-2">Inclusion</h5>
+                                <p>We champion diversity and create equal opportunities for all professionals.</p>
+                            </div>
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <h5 class="mb-2">Impact</h5>
+                                <p>We measure our success by the positive difference we make in people's careers and organizations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <!-- <section class="team-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="section-title mx-auto">Our Leadership Team</h2>
+                    <p class="mb-0">Meet the talented individuals behind TalentHive's success</p>
+                </div>
+            </div>
+            <div class="row"> -->
+                <!-- Team Member 1 -->
+                <!-- <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                        <div class="team-img-container">
+                            <img src="/api/placeholder/300/300" alt="CEO" class="img-fluid team-img">
+                        </div>
+                        <div class="team-info">
+                            <h4 class="team-name">Sarah Johnson</h4>
+                            <p class="team-position">Chief Executive Officer</p>
+                            <div class="team-social">
+                                <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                
+                <!-- Team Member 2 -->
+                <!-- <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                        <div class="team-img-container">
+                            <img src="/api/placeholder/300/300" alt="CTO" class="img-fluid team-img">
+                        </div>
+                        <div class="team-info">
+                            <h4 class="team-name">David Chen</h4>
+                            <p class="team-position">Chief Technology Officer</p>
+                            <div class="team-social">
+                                <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                
+                <!-- Team Member 3 -->
+                <!-- <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                        <div class="team-img-container">
+                            <img src="/api/placeholder/300/300" alt="COO" class="img-fluid team-img">
+                        </div>
+                        <div class="team-info">
+                            <h4 class="team-name">Maya Rodriguez</h4>
+                            <p class="team-position">Chief Operations Officer</p>
+                            <div class="team-social">
+                                <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                
+                <!-- Team Member 4 -->
+                <!-- <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                        <div class="team-img-container">
+                            <img src="/api/placeholder/300/300" alt="CMO" class="img-fluid team-img">
+                        </div>
+                        <div class="team-info">
+                            <h4 class="team-name">James Wilson</h4>
+                            <p class="team-position">Chief Marketing Officer</p>
+                            <div class="team-social">
+                                <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Testimonials Section -->
+    <!-- <section class="testimonial-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="section-title mx-auto">What Our Clients Say</h2>
+                </div>
+            </div>
+            <div class="row"> -->
+                <!-- Testimonial 1 -->
+                <!-- <div class="col-md-6 mb-4">
+                    <div class="testimonial-card">
+                        <div class="quote-icon">
+                            <i class="bi bi-quote"></i>
+                        </div>
+                        <p class="testimonial-text">TalentHive transformed our recruitment process. Within weeks, we found exceptional candidates that perfectly matched our requirements. Their team understood our company culture and delivered beyond our expectations.</p>
+                        <div class="testimonial-author">
+                            <div class="author-img">
+                                <img src="/api/placeholder/50/50" alt="Testimonial Author" class="img-fluid">
+                            </div>
+                            <div class="author-info">
+                                <h5>Michael Thompson</h5>
+                                <p class="author-position">HR Director, Tech Innovations Inc.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                
+                <!-- Testimonial 2 -->
+                <!-- <div class="col-md-6 mb-4">
+                    <div class="testimonial-card">
+                        <div class="quote-icon">
+                            <i class="bi bi-quote"></i>
+                        </div>
+                        <p class="testimonial-text">As a fast-growing startup, finding the right talent quickly was crucial for us. TalentHive provided an easy-to-use platform and quality candidates that helped us scale our team efficiently. Would highly recommend!</p>
+                        <div class="testimonial-author">
+                            <div class="author-img">
+                                <img src="/api/placeholder/50/50" alt="Testimonial Author" class="img-fluid">
+                            </div>
+                            <div class="author-info">
+                                <h5>Rebecca Park</h5>
+                                <p class="author-position">Founder, GrowthFirst</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                
+                <!-- Testimonial 3 -->
+                <!-- <div class="col-md-6 mb-4">
+                    <div class="testimonial-card">
+                        <div class="quote-icon">
+                            <i class="bi bi-quote"></i>
+                        </div>
+                        <p class="testimonial-text">We've worked with several recruitment platforms, but TalentHive stands out for their personalized approach and exceptional candidate quality. They've become an essential partner in our talent acquisition strategy.</p>
+                        <div class="testimonial-author">
+                            <div class="author-img">
+                                <img src="/api/placeholder/50/50" alt="Testimonial Author" class="img-fluid">
+                            </div>
+                            <div class="author-info">
+                                <h5>Jonathan Lee</h5>
+                                <p class="author-position">VP of Talent, Enterprise Solutions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                
+                <!-- Testimonial 4 -->
+                <!-- <div class="col-md-6 mb-4">
+                    <div class="testimonial-card">
+                        <div class="quote-icon">
+                            <i class="bi bi-quote"></i>
+                        </div>
+                        <p class="testimonial-text">The analytics and insights provided by TalentHive have been game-changing for our recruitment strategy. We've reduced time-to-hire by 40% and improved candidate quality across all departments.</p>
+                        <div class="testimonial-author">
+                            <div class="author-img">
+                                <img src="/api/placeholder/50/50" alt="Testimonial Author" class="img-fluid">
+                            </div>
+                            <div class="author-info">
+                                <h5>Emma Santiago</h5>
+                                <p class="author-position">Recruitment Manager, Global Retail Inc.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="cta-title">Ready to transform your hiring process?</h2>
+                    <p class="cta-subtitle">Join TalentHive to find their perfect candidates. Get started today and experience the difference.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="emp_signup.html" class="btn btn-cta">Create Free Account</a>
+                        <!-- <a href="contact.html" class="btn btn-outline-light">Contact Sales</a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <!-- Quick Links -->
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Quick Links</h5>
+                    <a href="emp_aboutUs.html" class="footer-link">About Us</a>
+                    <a href="#" class="footer-link">Find Talent</a>
+                    <a href="emp_signin.html" class="footer-link">Post a Job</a>
+                    <a href="#" class="footer-link">Pricing</a>
+                </div>
+
+                <!-- Resources -->
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Resources</h5>
+                    <a href="#" class="footer-link">Employer Guide</a>
+                    <a href="#" class="footer-link">Hiring Tips</a>
+                    <a href="#" class="footer-link">Blog</a>
+                    <a href="emp_contactUs.html" class="footer-link">Help Center</a>
+                </div>
+
+                <!-- Legal -->
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Legal</h5>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Cookies Policy</a>
+                    <a href="#" class="footer-link">Accessibility</a>
+                </div>
+
+                <!-- Newsletter & Social -->
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Stay Connected</h5>
+                    <p class="mb-3">Subscribe to get the latest job market insights</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Your email" aria-label="Your email">
+                        <button class="btn" type="button">Subscribe</button>
+                    </div>
+                    <div class="social-icons">
+                        <a href="#"><i class="bi bi-linkedin"></i></a>
+                        <a href="#"><i class="bi bi-twitter"></i></a>
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row copyright">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2025 TalentHive. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">Made with <i class="bi bi-heart-fill text-danger"></i> for employers worldwide</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../static/js/nav-bg.js"></script>
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Script for Animations -->
+    <script>
+        // Add scrolled class to navbar when scrolling
+        // window.addEventListener('scroll', function() {
+        //     const navbar = document.querySelector('.navbar');
+        //     if (window.scrollY > 50) {
+        //         navbar.classList.add('navbar-scrolled');
+        //     } else {
+        //         navbar.classList.remove('navbar-scrolled');
+        //     }
+        // });
+        
+        // Animate elements when they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateItems = document.querySelectorAll('.stats-card, .mv-card, .team-card, .testimonial-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-up');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.2
+            });
+            
+            animateItems.forEach(item => {
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>

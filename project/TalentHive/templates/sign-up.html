@@ -1,0 +1,287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Job Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Lato', sans-serif;
+        }
+    
+        .container-form {
+          max-width: 70rem;
+          width: 40%;
+          height: 50%;
+          background: #fff;
+          padding: 40px;
+          border-radius: 40px;
+          box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+          margin-top: 150px;
+          flex: 1;
+          display: flex;
+      }
+      .sign-up-form {
+        width: 100%;
+        margin-left: 20px;
+      
+      }
+      
+        .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0px 0px 5px rgba(40, 167, 69, 0.5);
+        }
+        .btn-primary {
+            background-color: #92d35e;
+            border: none;
+            border-radius: 12px;
+            transition: background 0.3s;
+
+        }
+        .btn-primary:hover {
+            background-color: #4b4b4b;
+        }
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .toggle-password {
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 70%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+ <!-- Navbar -->
+ <nav class="navbar navbar-expand-xl fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'index.html' %}">
+      <img class="w-100" src="{% static 'img/Company_logo.png' %}" alt="">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-card-item">
+          <a class="nav-link" href="{% url 'index.html' %}">Home</a>
+        </li>
+        <li class="nav-card-item">
+          <a class="nav-link" href="{% url 'aboutus.html' %}">About</a>
+        </li>
+        <li class="nav-card-item">
+          <a class="nav-link" href="{% url 'contact.html' %}">Contact</a>
+        </li>
+        <!-- <li class="nav-card-item">
+          <a class="nav-link" href="">Blog</a>
+        </li>          -->
+      </ul>
+      <ul class="right navbar-nav ms-auto">
+        <li class="nav-card-item-right">
+          <a class="nav-link" href="">Post job</a>
+        </li>
+        <li class="nav-card-item-right">
+          <a class="nav-link" href="{% url 'login.html' %}">Sign in</a>
+        </li>
+        <li class="nav-card-item-right create-account">
+          <a class="nav-link active" href="{% url 'sign-up.html' %}">Create account</a>
+        </li>       
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+    <div class="container d-flex justify-content-center  ">
+        <div class="container-form">
+          <div class="container-content">
+            <img src="{% static 'img/man-1459246_1280.png' %}" alt="sign-up" class="img-fluid w-60 h-60">
+            <h2 class="text-center mt-3">Create an account</h2>
+          </div>
+          <div class="sign-up-form">
+            <h2 class="text-center ">Sign Up</h2>
+            <form id="registerForm">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mobile Number</label>
+                    <input type="tel" class="form-control" id="mobile_number" required>
+                </div>
+                <div class="mb-3 position-relative">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" required>
+                    <i class="fas toggle-password" onclick="togglePassword('password')"></i>
+                </div>
+                <div class="mb-3 position-relative">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirm_password" required>
+                    <i class="fas toggle-password" onclick="togglePassword('confirm_password')"></i>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Role</label>
+                    <select class="form-control" id="role" required>
+                        <option value="user">User</option>
+                        <option value="hr">HR</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100  ">Sign Up</button>
+            </form>
+            <div id="response" class="mt-3 text-center"></div>  
+            <p class="text-center mt-3">Already have an account? <a href="{% url 'login.html' %}">Sign in</a></p>
+            </div>
+        </div>
+        
+    </div>
+   
+
+</main>
+ <!-- footer     -->
+    <footer>
+        <div class="container text-center text-md-start">
+          <div class="footer-wrap">
+            <div class="about">
+              <img src="{% static 'img/Company_logo.png'%}" alt="">
+              <p class="text-muted py-4">
+                Start your career journey with TalentHive — a job portal designed to connect you with the right opportunities, faster and smarter.
+              </p>
+              <div class="social-media">
+                <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/facebook-icon.svg' %}" alt=""></a>
+                <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/twitter-icon.svg' %}" alt=""></a>
+                <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/linkedin-icon.svg' %}" alt=""></a>
+                <a href="" class="me-2 text-reset"><img src="{% static 'img/icon/instagram-icon.svg' %}" alt=""></a>
+              </div>
+            </div>
+
+            <div class="company">
+              <h6 class="fw-bold">Company</h6>
+              <p><a href="{% url 'aboutus.html' %}">About us</a></p>
+              <!-- <p><a href="">Services</a></p>
+              <p><a href="">Team</a></p> -->
+              <!-- <p><a href="">Pricing</a></p>
+              <p><a href="">Project</a></p> -->
+              <!-- <p><a href="">Careers</a></p>
+              <p><a href="">Blog</a></p> -->
+              <p><a href="login.html">Login</a></p>
+            </div>
+            
+            <div class="useful-links">
+              <h6 class="fw-bold">Useful links</h6>
+              <p><a href="">Terms of Services</a></p>
+              <p><a href="">Privacy Policy</a></p>
+              <!-- <p><a href="">Documentation</a></p>
+              <p><a href="">Changelog</a></p>
+              <p><a href="">Components</a></p> -->
+            </div>
+
+            <div class="newsletter">
+              <h6 class="fw-bold">Newsletter</h6>
+              <p class="text-muted">Sign up and receive the latest tips
+                via email.</p>
+                <form id="subscribe" action="">
+                  <label for="email">Your e-mail:</label>
+                  <input type="email" placeholder="e-mail:" name="email" required>
+                  <button type="submit" class="main-btn">Subscribe</button>
+                </form>
+            </div>
+            
+          </div>
+      
+        </div>
+        
+      
+    </footer>
+
+    
+    <script src="{% static 'js/nav-bg.js' %}"></script>
+    <script>
+        function togglePassword(fieldId) {
+            let passwordField = document.getElementById(fieldId);
+            let icon = passwordField.nextElementSibling;
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   <script>
+
+   
+    const form = document.getElementById('registerForm');
+
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();  // Prevent form reload
+    
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const mobile_number = document.getElementById('mobile_number').value;
+        const password = document.getElementById('password').value;
+        const confirm_password = document.getElementById('confirm_password').value;
+        const role = document.getElementById('role').value;
+    
+        const requestBody = {
+            username,
+            email,
+            mobile_number,
+            password,
+            confirm_password,
+            role
+        };
+    
+        try {
+            const response = await fetch('http://127.0.0.1:8000/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                document.getElementById('response').innerText = data.message;
+                document.getElementById('response').style.color = 'green';
+                form.reset();  // Clear form
+            } else {
+                document.getElementById('response').innerText = data.error || "Registration failed.";
+                document.getElementById('response').style.color = 'red';
+            }
+    
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('response').innerText = "Something went wrong!";
+            document.getElementById('response').style.color = 'red';
+        }
+    });
+  </script>    
+   
+</body>
+</html>
