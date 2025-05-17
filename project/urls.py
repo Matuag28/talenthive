@@ -5,7 +5,7 @@ from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('talenthive.urls')),  # Include all URLs from the talenthive app
+    path('', include('talent.urls')),  # Include all URLs from the talent app
 ]
 
 if settings.DEBUG:
