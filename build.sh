@@ -11,8 +11,7 @@ workers = 4
 timeout = 120" > gunicorn.conf.py
 
 # Collect static files
-cd project
-python manage.py collectstatic --no-input
+python project/manage.py collectstatic --no-input
 
 # Run migrations
-python manage.py migrate 
+python project/manage.py migrate 
