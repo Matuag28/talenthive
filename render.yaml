@@ -3,7 +3,7 @@ services:
     name: talenthive
     env: python
     buildCommand: "./build.sh"
-    startCommand: "cd project && gunicorn project.wsgi:application"
+    startCommand: "cd project && PYTHONPATH=$PYTHONPATH:. gunicorn project.wsgi:application"
 
 
     envVars:
