@@ -3,7 +3,7 @@ services:
     name: talenthive
     env: python
     buildCommand: "./build.sh"
-    startCommand: "cd project && gunicorn project.wsgi:application"
+    startCommand: "gunicorn project.wsgi:application --chdir project"
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
