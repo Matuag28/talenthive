@@ -1,1 +1,1 @@
-web: cd project && PYTHONPATH=$PYTHONPATH:. gunicorn project.wsgi:application
+web: cd project && PYTHONPATH=$PYTHONPATH:$(pwd) gunicorn project.wsgi:application
