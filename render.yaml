@@ -21,6 +21,10 @@ services:
         fromDatabase:
           name: talenthive-db
           property: connectionString
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "talenthive.onrender.com"
 
 databases:
   - name: talenthive-db

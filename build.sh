@@ -9,4 +9,9 @@ pip install -r requirements.txt
 python project/manage.py collectstatic --no-input
 
 # Run migrations
-python project/manage.py migrate 
+python project/manage.py migrate
+
+# Create a new file to store the gunicorn configuration
+echo "bind = '0.0.0.0:10000'
+workers = 4
+timeout = 120" > gunicorn.conf.py 
