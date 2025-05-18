@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('TalentHive.urls')),
+    path('', include('talent.urls')),
 ]
 
 # Add media URL configuration
