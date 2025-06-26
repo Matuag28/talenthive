@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
-# import psycopg2
+import psycopg2
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,10 +82,14 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', 'postgresql://talenthive_3tvk_user:wDyCS0kOjuxcX9FjZbMLmwhYF4UpcLfc@dpg-d1ejscfgi27c73end5g0-a.oregon-postgres.render.com/talenthive_3tvk?sslmode=require'),
-        conn_max_age=600
+        default=os.environ.get('DATABASE_URL'),
+        # default='postgresql://talenthive_3tvk_user:wDyCS0kOjuxcX9FjZbMLmwhYF4UpcLfc@dpg-d1ejscfgi27c73end5g0-a.oregon-postgres.render.com/talenthive_3tvk',
+
+        
+       
     )
 }
+
 
 
 # DATABASES = {
@@ -101,10 +105,10 @@ DATABASES = {
 
 
 
-# conn = psycopg2.connect(
-#     "postgresql://talenthive_3tvk_user:wDyCS0kOjuxcX9FjZbMLmwhYF4UpcLfc@dpg-d1ejscfgi27c73end5g0-a.oregon-postgres.render.com/talenthive_3tvk",
-#     sslmode='require'
-# )
+conn = psycopg2.connect(
+    "postgresql://talenthive_3tvk_user:wDyCS0kOjuxcX9FjZbMLmwhYF4UpcLfc@dpg-d1ejscfgi27c73end5g0-a.oregon-postgres.render.com/talenthive_3tvk",
+    sslmode='require'
+)
 
 
 
