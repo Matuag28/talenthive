@@ -9,9 +9,7 @@ TalentHive
 
 - **User Profiles**: Job seekers can create detailed profiles highlighting their skills, work experience, and resumes, making it easy for employers to find suitable candidates.
 - **Job Listings**: Employers can post job openings with detailed descriptions, required qualifications, and application instructions, allowing for better-targeted recruitment.
-- **Advanced Search**: Users can filter job listings by location, industry, job type, and more, ensuring they find the most relevant opportunities.
 - **Application Tracking**: Job seekers can track their application status and receive notifications about new job listings or updates from potential employers.
-- **Employer Dashboard**: Employers can manage their job postings, review applications, and communicate with candidates through a centralized dashboard.
 - **Responsive Design**: The portal is optimized for both desktop and mobile devices, allowing users to access job listings and apply from anywhere.
 
 ## Tech Stack
@@ -23,4 +21,4 @@ TalentHive
 
 
 
- -link - https://talenthive-c0jn.onrender.com
+ link - https://talenthive-c0jn.onrender.com
