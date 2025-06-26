@@ -720,53 +720,110 @@
     <div class="container">
         <!-- Stats Cards -->
         <div class="row mb-4">
-            <!-- Total Jobs Posted -->
-            <div class="col-xl-3 col-md-6">
-                <div class="stats-card stats-card-jobs">
-                    <div class="stats-icon stats-icon-jobs">
-                        <i class="bi bi-briefcase"></i>
+            {% if companies %}
+                {% for company in companies %}
+                    <!-- Total Jobs Posted -->
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card stats-card-jobs">
+                            <div class="stats-icon stats-icon-jobs">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+                            <h5 class="stats-title">TOTAL JOBS POSTED</h5>
+                            <p class="stats-value">{{ company.stats.total_jobs }}</p>
+                            <p class="text-success mb-0">
+                                <i class="bi bi-arrow-up"></i> {{ company.stats.total_jobs_change }}% since last month
+                            </p>
+                        </div>
                     </div>
-                    <h5 class="stats-title">TOTAL JOBS POSTED</h5>
-                    <p class="stats-value">24</p>
-                    <p class="text-success mb-0"><i class="bi bi-arrow-up"></i> 4.2% since last month</p>
-                </div>
-            </div>
-            
-            <!-- Active Jobs -->
-            <div class="col-xl-3 col-md-6">
-                <div class="stats-card stats-card-active">
-                    <div class="stats-icon stats-icon-active">
-                        <i class="bi bi-lightning-charge"></i>
+                    
+                    <!-- Active Jobs -->
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card stats-card-active">
+                            <div class="stats-icon stats-icon-active">
+                                <i class="bi bi-lightning-charge"></i>
+                            </div>
+                            <h5 class="stats-title">ACTIVE JOBS</h5>
+                            <p class="stats-value">{{ company.stats.active_jobs }}</p>
+                            <p class="text-success mb-0">
+                                <i class="bi bi-arrow-up"></i> {{ company.stats.active_jobs_change }}% since last month
+                            </p>
+                        </div>
                     </div>
-                    <h5 class="stats-title">ACTIVE JOBS</h5>
-                    <p class="stats-value">18</p>
-                    <p class="text-success mb-0"><i class="bi bi-arrow-up"></i> 2.5% since last month</p>
-                </div>
-            </div>
-            
-            <!-- Applications Received -->
-            <div class="col-xl-3 col-md-6">
-                <div class="stats-card stats-card-applications">
-                    <div class="stats-icon stats-icon-applications">
-                        <i class="bi bi-file-earmark-text"></i>
+                    
+                    <!-- Applications Received -->
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card stats-card-applications">
+                            <div class="stats-icon stats-icon-applications">
+                                <i class="bi bi-file-earmark-text"></i>
+                            </div>
+                            <h5 class="stats-title">APPLICATIONS RECEIVED</h5>
+                            <p class="stats-value">{{ company.stats.total_applications }}</p>
+                            <p class="text-success mb-0">
+                                <i class="bi bi-arrow-up"></i> {{ company.stats.applications_change }}% since last month
+                            </p>
+                        </div>
                     </div>
-                    <h5 class="stats-title">APPLICATIONS RECEIVED</h5>
-                    <p class="stats-value">156</p>
-                    <p class="text-success mb-0"><i class="bi bi-arrow-up"></i> 12.8% since last month</p>
-                </div>
-            </div>
-            
-            <!-- Shortlisted Candidates -->
-            <div class="col-xl-3 col-md-6">
-                <div class="stats-card stats-card-shortlisted">
-                    <div class="stats-icon stats-icon-shortlisted">
-                        <i class="bi bi-people"></i>
+                    
+                    <!-- Shortlisted Candidates -->
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card stats-card-shortlisted">
+                            <div class="stats-icon stats-icon-shortlisted">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <h5 class="stats-title">SHORTLISTED CANDIDATES</h5>
+                            <p class="stats-value">{{ company.stats.shortlisted_applications }}</p>
+                            <p class="text-success mb-0">
+                                <i class="bi bi-arrow-up"></i> {{ company.stats.shortlisted_change }}% since last month
+                            </p>
+                        </div>
                     </div>
-                    <h5 class="stats-title">SHORTLISTED CANDIDATES</h5>
-                    <p class="stats-value">42</p>
-                    <p class="text-success mb-0"><i class="bi bi-arrow-up"></i> 8.3% since last month</p>
+                {% endfor %}
+            {% else %}
+                <!-- Default stats when no company is selected -->
+                <div class="col-xl-3 col-md-6">
+                    <div class="stats-card stats-card-jobs">
+                        <div class="stats-icon stats-icon-jobs">
+                            <i class="bi bi-briefcase"></i>
+                        </div>
+                        <h5 class="stats-title">TOTAL JOBS POSTED</h5>
+                        <p class="stats-value">0</p>
+                        <p class="text-muted mb-0">Select a company to view stats</p>
+                    </div>
                 </div>
-            </div>
+                
+                <div class="col-xl-3 col-md-6">
+                    <div class="stats-card stats-card-active">
+                        <div class="stats-icon stats-icon-active">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+                        <h5 class="stats-title">ACTIVE JOBS</h5>
+                        <p class="stats-value">0</p>
+                        <p class="text-muted mb-0">Select a company to view stats</p>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6">
+                    <div class="stats-card stats-card-applications">
+                        <div class="stats-icon stats-icon-applications">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <h5 class="stats-title">APPLICATIONS RECEIVED</h5>
+                        <p class="stats-value">0</p>
+                        <p class="text-muted mb-0">Select a company to view stats</p>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6">
+                    <div class="stats-card stats-card-shortlisted">
+                        <div class="stats-icon stats-icon-shortlisted">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h5 class="stats-title">SHORTLISTED CANDIDATES</h5>
+                        <p class="stats-value">0</p>
+                        <p class="text-muted mb-0">Select a company to view stats</p>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         
         <div class="row">

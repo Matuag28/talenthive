@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
+import psycopg2
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,7 @@ ALLOWED_HOSTS = [
     'talenthive-c0jn.onrender.com',
     'localhost',
     '127.0.0.1',
+    '127.0.0.1:8000',
 ]
 
 # Application definition
@@ -81,10 +83,36 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),
+        default='postgresql://talenthive_3tvk_user:wDyCS0kOjuxcX9FjZbMLmwhYF4UpcLfc@dpg-d1ejscfgi27c73end5g0-a.oregon-postgres.render.com/talenthive_3tvk',
+
         
         conn_max_age=600
     )
 }
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'job1',
+#         'USER': 'root',
+#         'PASSWORD': '7004',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
+
+
+
+# conn = psycopg2.connect(
+#     "postgresql://talenthive_user:ZwM1cccI3bliir8FhfUdjnkPmZ5e2wEw@dpg-d0k2qaje5dus73bde9kg-a.oregon-postgres.render.com/talenthive",
+#     sslmode='require'
+# )
+
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -133,15 +161,16 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Security Settings
-SECURE_SSL_REDIRECT = not DEBUG
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 # Email Configuration
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')

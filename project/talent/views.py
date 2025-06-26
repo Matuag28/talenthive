@@ -2218,10 +2218,3 @@ def delete_company(request, company_id):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-
-
-
-
-
-
-
