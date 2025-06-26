@@ -83,9 +83,8 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),
-        # default='postgresql://talenthive_3tvk_user:wDyCS0kOjuxcX9FjZbMLmwhYF4UpcLfc@dpg-d1ejscfgi27c73end5g0-a.oregon-postgres.render.com/talenthive_3tvk',
 
-        
+        sslmode='require',
         conn_max_age=600
     )
 }
