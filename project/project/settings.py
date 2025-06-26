@@ -13,7 +13,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
-import psycopg2
+from decouple import config
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,25 +83,64 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 # DATABASES = {
-#     'default': dj_database_url.config(
-#         default=os.environ.get('DATABASE_URL'),
-        
-#         conn_max_age=600
-       
-#     )
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'talenthive_3tvk',
+#         'USER': 'talenthive_3tvk_user',
+#         'PASSWORD': 'wDyCS0kOjuxcX9FjZbMLmwhYF4UpcLfc',
+#         'HOST': 'dpg-d0k2qaje5dus73bde9kg-a.oregon-postgres.render.com',
+#         'PORT': '5432',
+#         'OPTIONS': {
+#             'sslmode': 'require',
+#             # Optional: Add this if Render provides certs (rare)
+#             # 'sslrootcert': '/path/to/render-ca.pem'
+#         }
+#     }
 # }
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+
+
+# Mysql pythonanywhere
 
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'job1',
+#         'NAME': 'GautamM$talenthive',
+#         'USER': 'GautamM',
+#         'PASSWORD': 'Gautam123456',
+#         'HOST': 'GautamM.mysql.pythonanywhere-services.com',
+#         'PORT': '3306',
+#     }
+# }
+import dj_database_url
+from decouple import config
+
+DATABASES = {
+    'default': dj_database_url.parse(
+        config("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True  # Force SSL (Render needs this)
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'job2',
 #         'USER': 'root',
 #         'PASSWORD': '7004',
 #         'HOST': 'localhost',
@@ -109,10 +150,8 @@ DATABASES = {
 
 
 
-# conn = psycopg2.connect(
-#     "postgresql://talenthive_3tvk_user:wDyCS0kOjuxcX9FjZbMLmwhYF4UpcLfc@dpg-d1ejscfgi27c73end5g0-a.oregon-postgres.render.com/talenthive_3tvk",
-#     sslmode='require'
-# )
+
+
 
 
 
