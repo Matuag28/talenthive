@@ -20,4 +20,7 @@ TalentHive
 - **Backend**: Django framework.
 - **Database**: PostgreSQL for flexible data storage and retrieval.
 - **Deployment**: Render for hosting the application.
-link - https://talenthive-c0jn.onrender.com
+
+
+
+ -link - https://talenthive-c0jn.onrender.com
